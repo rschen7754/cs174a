@@ -36,6 +36,10 @@
 #define glewInit()
 #endif
 
+void idleHandler() {
+    
+}
+
 int main(int argc, const char * argv[])
 {
 
