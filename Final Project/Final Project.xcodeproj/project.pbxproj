@@ -13,6 +13,12 @@
 		BC63B44D17509B88007559CA /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B44C17509B88007559CA /* GLUT.framework */; };
 		BC63B44F17509B8D007559CA /* libGLEW.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B44E17509B8D007559CA /* libGLEW.dylib */; };
 		BC63B4551750A3C4007559CA /* InitShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC63B4521750A3C4007559CA /* InitShader.cpp */; };
+		BC63B47A17517977007559CA /* freeglut.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B46E17517977007559CA /* freeglut.lib */; };
+		BC63B47B17517977007559CA /* glew32.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B47217517977007559CA /* glew32.lib */; };
+		BC63B47C17517977007559CA /* glew32mx.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B47317517977007559CA /* glew32mx.lib */; };
+		BC63B47D17517977007559CA /* glew32mxs.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B47417517977007559CA /* glew32mxs.lib */; };
+		BC63B47E17517977007559CA /* glew32s.lib in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B47517517977007559CA /* glew32s.lib */; };
+		BC63B49217517E78007559CA /* tga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC63B48917517E78007559CA /* tga.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +46,22 @@
 		BC63B4521750A3C4007559CA /* InitShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InitShader.cpp; path = Angel/InitShader.cpp; sourceTree = "<group>"; };
 		BC63B4531750A3C4007559CA /* mat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mat.h; path = Angel/mat.h; sourceTree = "<group>"; };
 		BC63B4541750A3C4007559CA /* vec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vec.h; path = Angel/vec.h; sourceTree = "<group>"; };
+		BC63B46C17517977007559CA /* Copying.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Copying.txt; sourceTree = "<group>"; };
+		BC63B46D17517977007559CA /* freeglut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = freeglut.h; sourceTree = "<group>"; };
+		BC63B46E17517977007559CA /* freeglut.lib */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = freeglut.lib; sourceTree = "<group>"; };
+		BC63B46F17517977007559CA /* freeglut_ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = freeglut_ext.h; sourceTree = "<group>"; };
+		BC63B47017517977007559CA /* freeglut_std.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = freeglut_std.h; sourceTree = "<group>"; };
+		BC63B47117517977007559CA /* glew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glew.h; sourceTree = "<group>"; };
+		BC63B47217517977007559CA /* glew32.lib */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = glew32.lib; sourceTree = "<group>"; };
+		BC63B47317517977007559CA /* glew32mx.lib */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = glew32mx.lib; sourceTree = "<group>"; };
+		BC63B47417517977007559CA /* glew32mxs.lib */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = glew32mxs.lib; sourceTree = "<group>"; };
+		BC63B47517517977007559CA /* glew32s.lib */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = glew32s.lib; sourceTree = "<group>"; };
+		BC63B47617517977007559CA /* glut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glut.h; sourceTree = "<group>"; };
+		BC63B47717517977007559CA /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glxew.h; sourceTree = "<group>"; };
+		BC63B47817517977007559CA /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
+		BC63B47917517977007559CA /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wglew.h; sourceTree = "<group>"; };
+		BC63B48917517E78007559CA /* tga.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tga.cpp; sourceTree = "<group>"; };
+		BC63B48A17517E78007559CA /* tga.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tga.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +72,11 @@
 				BC63B44F17509B8D007559CA /* libGLEW.dylib in Frameworks */,
 				BC63B44D17509B88007559CA /* GLUT.framework in Frameworks */,
 				BC63B44B17509B82007559CA /* OpenGL.framework in Frameworks */,
+				BC63B47A17517977007559CA /* freeglut.lib in Frameworks */,
+				BC63B47B17517977007559CA /* glew32.lib in Frameworks */,
+				BC63B47C17517977007559CA /* glew32mx.lib in Frameworks */,
+				BC63B47D17517977007559CA /* glew32mxs.lib in Frameworks */,
+				BC63B47E17517977007559CA /* glew32s.lib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,8 +105,11 @@
 		BC63B43917508229007559CA /* Final Project */ = {
 			isa = PBXGroup;
 			children = (
+				BC63B46B17517977007559CA /* GL */,
 				BC63B44917509657007559CA /* Angel */,
 				BC63B43A17508229007559CA /* main.cpp */,
+				BC63B48917517E78007559CA /* tga.cpp */,
+				BC63B48A17517E78007559CA /* tga.h */,
 				BC63B43C17508229007559CA /* Final_Project.1 */,
 			);
 			path = "Final Project";
@@ -95,6 +125,27 @@
 				BC63B4541750A3C4007559CA /* vec.h */,
 			);
 			name = Angel;
+			sourceTree = "<group>";
+		};
+		BC63B46B17517977007559CA /* GL */ = {
+			isa = PBXGroup;
+			children = (
+				BC63B46C17517977007559CA /* Copying.txt */,
+				BC63B46D17517977007559CA /* freeglut.h */,
+				BC63B46E17517977007559CA /* freeglut.lib */,
+				BC63B46F17517977007559CA /* freeglut_ext.h */,
+				BC63B47017517977007559CA /* freeglut_std.h */,
+				BC63B47117517977007559CA /* glew.h */,
+				BC63B47217517977007559CA /* glew32.lib */,
+				BC63B47317517977007559CA /* glew32mx.lib */,
+				BC63B47417517977007559CA /* glew32mxs.lib */,
+				BC63B47517517977007559CA /* glew32s.lib */,
+				BC63B47617517977007559CA /* glut.h */,
+				BC63B47717517977007559CA /* glxew.h */,
+				BC63B47817517977007559CA /* Readme.txt */,
+				BC63B47917517977007559CA /* wglew.h */,
+			);
+			path = GL;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,6 +200,7 @@
 			files = (
 				BC63B43B17508229007559CA /* main.cpp in Sources */,
 				BC63B4551750A3C4007559CA /* InitShader.cpp in Sources */,
+				BC63B49217517E78007559CA /* tga.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,7 +236,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = "";
 			};
 			name = Debug;
 		};
@@ -210,13 +262,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				SDKROOT = macosx;
+				SDKROOT = "";
 			};
 			name = Release;
 		};
 		BC63B44117508229007559CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Final Project/GL\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = "";
 			};
@@ -225,6 +281,10 @@
 		BC63B44217508229007559CA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Final Project/GL\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = "";
 			};
