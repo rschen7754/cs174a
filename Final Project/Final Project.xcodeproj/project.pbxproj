@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		BC63B43B17508229007559CA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC63B43A17508229007559CA /* main.cpp */; };
 		BC63B43D17508229007559CA /* Final_Project.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = BC63B43C17508229007559CA /* Final_Project.1 */; };
+		BC63B44B17509B82007559CA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B44A17509B82007559CA /* OpenGL.framework */; };
+		BC63B44D17509B88007559CA /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B44C17509B88007559CA /* GLUT.framework */; };
+		BC63B44F17509B8D007559CA /* libGLEW.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B44E17509B8D007559CA /* libGLEW.dylib */; };
+		BC63B4551750A3C4007559CA /* InitShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC63B4521750A3C4007559CA /* InitShader.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +32,14 @@
 		BC63B43717508229007559CA /* Final Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Final Project"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC63B43A17508229007559CA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		BC63B43C17508229007559CA /* Final_Project.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Final_Project.1; sourceTree = "<group>"; };
+		BC63B44A17509B82007559CA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
+		BC63B44C17509B88007559CA /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../../System/Library/Frameworks/GLUT.framework; sourceTree = "<group>"; };
+		BC63B44E17509B8D007559CA /* libGLEW.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.dylib; path = ../../../../usr/local/lib/libGLEW.dylib; sourceTree = "<group>"; };
+		BC63B4501750A3C4007559CA /* Angel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Angel.h; path = Angel/Angel.h; sourceTree = "<group>"; };
+		BC63B4511750A3C4007559CA /* CheckError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CheckError.h; path = Angel/CheckError.h; sourceTree = "<group>"; };
+		BC63B4521750A3C4007559CA /* InitShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = InitShader.cpp; path = Angel/InitShader.cpp; sourceTree = "<group>"; };
+		BC63B4531750A3C4007559CA /* mat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mat.h; path = Angel/mat.h; sourceTree = "<group>"; };
+		BC63B4541750A3C4007559CA /* vec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vec.h; path = Angel/vec.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +47,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC63B44F17509B8D007559CA /* libGLEW.dylib in Frameworks */,
+				BC63B44D17509B88007559CA /* GLUT.framework in Frameworks */,
+				BC63B44B17509B82007559CA /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +59,9 @@
 		BC63B42E17508229007559CA = {
 			isa = PBXGroup;
 			children = (
+				BC63B44E17509B8D007559CA /* libGLEW.dylib */,
+				BC63B44C17509B88007559CA /* GLUT.framework */,
+				BC63B44A17509B82007559CA /* OpenGL.framework */,
 				BC63B43917508229007559CA /* Final Project */,
 				BC63B43817508229007559CA /* Products */,
 			);
@@ -60,10 +78,23 @@
 		BC63B43917508229007559CA /* Final Project */ = {
 			isa = PBXGroup;
 			children = (
+				BC63B44917509657007559CA /* Angel */,
 				BC63B43A17508229007559CA /* main.cpp */,
 				BC63B43C17508229007559CA /* Final_Project.1 */,
 			);
 			path = "Final Project";
+			sourceTree = "<group>";
+		};
+		BC63B44917509657007559CA /* Angel */ = {
+			isa = PBXGroup;
+			children = (
+				BC63B4501750A3C4007559CA /* Angel.h */,
+				BC63B4511750A3C4007559CA /* CheckError.h */,
+				BC63B4521750A3C4007559CA /* InitShader.cpp */,
+				BC63B4531750A3C4007559CA /* mat.h */,
+				BC63B4541750A3C4007559CA /* vec.h */,
+			);
+			name = Angel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,6 +148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC63B43B17508229007559CA /* main.cpp in Sources */,
+				BC63B4551750A3C4007559CA /* InitShader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +218,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = "";
 			};
 			name = Debug;
 		};
@@ -193,6 +226,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = "";
 			};
 			name = Release;
 		};
