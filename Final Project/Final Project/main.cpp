@@ -38,17 +38,66 @@
 #endif
 
 #include "mapGen.h"
+#include "tga.h"
 
 int Width = 800;
 int Height = 800 ;
 
+GLfloat shiftX = 0.0;
+GLfloat shiftY = 0.0;
+GLfloat shiftZ = 0.0;
+GLfloat shiftTheta = 0.0;
+
+mat4         model_view;
+GLint        uModelView, uProjection, uView;
+GLint        uAmbient, uDiffuse, uSpecular, uLightPos, uShininess;
+GLint        uTex, uEnableTex;
+
+// The eye point and look-at point.
+// Currently unused. Use to control a camera with LookAt().
+Angel::vec4 eye{0, 0.0, 50.0,1.0};
+Angel::vec4 ref{0.0, 0.0, 0.0,1.0};
+Angel::vec4 up{0.0,1.0,0.0,0.0};
+
 void init() {
+    
     GLuint program = InitShader( "vshader.glsl", "fshader.glsl" );
     glUseProgram(program);
+    
+    readFile();
+    
+    uModelView  = glGetUniformLocation( program, "ModelView"  );
+    uProjection = glGetUniformLocation( program, "Projection" );
+    uView       = glGetUniformLocation( program, "View"       );
+    
+    glClearColor( 0.4, 0.4, 0.8, 1.0 ); // dark blue background
+    
+    uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
+    uDiffuse   = glGetUniformLocation( program, "DiffuseProduct"  );
+    uSpecular  = glGetUniformLocation( program, "SpecularProduct" );
+    uLightPos  = glGetUniformLocation( program, "LightPosition"   );
+    uShininess = glGetUniformLocation( program, "Shininess"       );
+    uTex       = glGetUniformLocation( program, "Tex"             );
+    uEnableTex = glGetUniformLocation( program, "EnableTex"       );
+    
+    glUniform4f(uAmbient,    0.2f,  0.2f,  0.2f, 1.0f);
+    glUniform4f(uDiffuse,    0.6f,  0.6f,  0.6f, 1.0f);
+    glUniform4f(uSpecular,   0.2f,  0.2f,  0.2f, 1.0f);
+    glUniform4f(uLightPos,  0.0f, 10.0f, 20.0f, 0.0f);
+    glUniform1f(uShininess, 100.0f);
+    
+    glEnable(GL_DEPTH_TEST);
 }
 
 void displayHandler() {
+    // Clear the screen with the background colour (set in myinit)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+    model_view = mat4(1.0f)*Translate(0.25*shiftX, 0.25*shiftY, 0.25*shiftZ);
+    
+    glUniformMatrix4fv( uModelView, 1, GL_TRUE, model_view );
+
+    glutSwapBuffers();
 }
 
 void keyHandler(unsigned char key, int x, int y) {
@@ -78,7 +127,7 @@ int main(int argc, char** argv)
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition (0, 0);
     glutInitWindowSize(Width,Height);
-    glutCreateWindow( "Texture Cubes");
+    glutCreateWindow( "Game");
     //printf("GL version %s\n", glGetString(GL_VERSION));
     glewExperimental = GL_TRUE;
     glewInit();
@@ -90,7 +139,6 @@ int main(int argc, char** argv)
     glutKeyboardFunc( keyHandler );
     glutMouseFunc(buttonHandler) ;
     glutMotionFunc(motionHandler) ;
-    //instructions();
     
     glutDisplayFunc(displayHandler);
     glutMainLoop();
