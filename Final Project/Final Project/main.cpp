@@ -37,6 +37,8 @@
 #define glewInit()
 #endif
 
+#include "mapGen.h"
+
 int Width = 800;
 int Height = 800 ;
 
