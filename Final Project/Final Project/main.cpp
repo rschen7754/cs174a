@@ -70,7 +70,7 @@ void init() {
     uProjection = glGetUniformLocation( program, "Projection" );
     uView       = glGetUniformLocation( program, "View"       );
     
-    glClearColor( 0.4, 0.4, 0.8, 1.0 ); // dark blue background
+    glClearColor( 0.2, 0.2, 1.0, 1.0 ); // dark blue background
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
     uDiffuse   = glGetUniformLocation( program, "DiffuseProduct"  );
@@ -101,7 +101,7 @@ void displayHandler() {
 }
 
 void keyHandler(unsigned char key, int x, int y) {
-    
+        if (key=='q' || key=='Q') exit(0);
 }
 void reshapeHandler(int w, int h) {
     
