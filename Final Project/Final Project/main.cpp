@@ -64,6 +64,9 @@ void init() {
     GLuint program = InitShader( "vshader.glsl", "fshader.glsl" );
     glUseProgram(program);
     
+	//data stored in "map" (20x10 array of integers);
+	//0 = no block, 1 = block present, 2 = start position
+
     readFile();
     
     uModelView  = glGetUniformLocation( program, "ModelView"  );
