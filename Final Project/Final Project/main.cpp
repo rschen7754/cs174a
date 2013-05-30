@@ -65,7 +65,7 @@ void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat 
 void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z)
 {
 
-    glUseProgram(program);
+
     
     // Create and initialize a buffer object
     glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices, NULL, GL_STATIC_DRAW );
@@ -156,8 +156,10 @@ void Player::move(int dir)
         m_posx += 5+5;
         pos_x -=5+5;
     }else if (dir == FORWARD){
-        m_posz -= 0.08;
-        pos_z += 0.08;
+//        m_posz -= 0.08;
+//        pos_z += 0.08;
+        m_posz -= DTIME*100;
+        pos_z += DTIME*100;
     }
 }
 
@@ -184,9 +186,9 @@ bool Player:: didCollide(){
 }
 
 void Player::draw(){
-    drawRectangle(shipleft, vec4(0.0,1.0,0.0,1.0), m_posx, m_posy, m_posz);
-    drawRectangle(shipCenter, vec4(1.0,0.0,0.0,1.0), m_posx, m_posy, m_posz);
-    drawRectangle(shipRight, vec4(0.0,1.0,0.0,1.0), m_posx, m_posy, m_posz);
+    drawRectangle(shipleft, COLOR_BLUE, m_posx, m_posy, m_posz);
+    drawRectangle(shipCenter, COLOR_GREY, m_posx, m_posy, m_posz);
+    drawRectangle(shipRight, COLOR_BLUE, m_posx, m_posy, m_posz);
     
 }
 
@@ -207,6 +209,7 @@ void init() {
  
     program = InitShader( "vshader.glsl", "fshader.glsl" );
     
+    glUseProgram(program);
 	//data stored in "map" (20x10 array of integers);
 	//0 = no block, 1 = block present, 2 = start position
 
@@ -219,8 +222,8 @@ void init() {
     // Place test blocks into blocks vector for collision detection
     
     // Set black background
-  //  glClearColor( 0.0, 0.0, 0.0, 1.0 );
-      glClearColor( 1.0, 1.0, 1.0, 1.0 );
+    glClearColor( 0.0, 0.0, 0.0, 1.0 );
+   //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
 
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
@@ -251,19 +254,15 @@ void displayHandler() {
         p = Ortho(-1.0, 1.0, -1.0, 1.0, 0.5, 3.0);
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
         
-        for (int i=0; i<12; i++) {
-            colors[i] = color4 (1.0, 1.0, 1.0, 1.0);
-        }
-        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(crosshairs), crosshairs );
-        glBufferSubData( GL_ARRAY_BUFFER, sizeof(points), sizeof(colors), colors );
-        
         glDrawArrays( GL_TRIANGLES, 0, 12 );
     }
     
     // Draw the Planets and the Sun
-    // drawSun(); // Sun at 17,0,0
+
     User.draw();
-    drawRectangle(shipleft, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
+    drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
+    drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
+    drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
     
     User.didCollide();
     glutSwapBuffers();
@@ -303,9 +302,6 @@ void keyHandler(unsigned char key, int x, int y) {
             pos_y = -110.0;
             pos_z = -250.0;
             break;
-        
-            
-            
             
         case 'q':
         case 'Q':
@@ -362,10 +358,14 @@ void idleHandler() {
     DTIME = TIME - TIME_LAST;
     TIME_LAST = TIME;
     
-    if (static_cast<int>(DTIME) %10 == 0) {
-        User.move(FORWARD);
-        glutPostRedisplay();
-    }
+    
+    User.move(FORWARD);
+    glutPostRedisplay();
+    
+//    if (static_cast<int>(DTIME) %10 == 0) {
+//        User.move(FORWARD);
+//        glutPostRedisplay();
+//    }
 }
 
 int main(int argc, char** argv)
