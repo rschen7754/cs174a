@@ -6,4 +6,5 @@
 	extern int map[MAXROWS][MAXCOLS-10];
 
 	bool readFile();
+	void storeBlocks();
 	
