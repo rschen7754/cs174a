@@ -68,6 +68,7 @@
 		BCCE33A91753F7770099B924 /* mapGen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mapGen.h; sourceTree = "<group>"; };
 		BCCE33AB17542E380099B924 /* fshader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fshader.glsl; sourceTree = "<group>"; };
 		BCCE33AC17542E380099B924 /* vshader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vshader.glsl; sourceTree = "<group>"; };
+		BCE982511757FDBD00DB1D40 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +123,7 @@
 				BC63B48917517E78007559CA /* tga.cpp */,
 				BC63B48A17517E78007559CA /* tga.h */,
 				BC63B43C17508229007559CA /* Final_Project.1 */,
+				BCE982511757FDBD00DB1D40 /* main.h */,
 			);
 			path = "Final Project";
 			sourceTree = "<group>";
