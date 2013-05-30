@@ -45,6 +45,7 @@
 
 #include "mapGen.h"
 #include "tga.h"
+#include "Timer.h"
 
 
 const static int MENU_ON=1;
@@ -73,9 +74,11 @@ typedef Angel::vec4  point4;
 int Index = 0;
 const int NumVertices = 36;
 
+// Arrays to hold ship points
 point4 cube[8];
-point4 points[NumVertices];
-point4 colors[NumVertices];
+point4 shipleft[NumVertices];
+point4 shipRight[NumVertices];
+point4 shipCenter[NumVertices];
 
 
 struct cubePos {
@@ -87,14 +90,18 @@ struct cubePos {
 std::vector<cubePos> blocks;
 
 
-void callbackDisplay();
-void drawSphere(GLfloat x, GLfloat y, GLfloat z, GLfloat r, GLfloat rotate, int numSubdivide, vec4 fColor, GLint shading);
-void createCube(point4 cube[], int x, int y, int z);
-void drawRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height, GLfloat length, vec4 fColor);
+// Creates a cube
+void createCube(point4 cube[], int x, int y, int z, int width, int height, int length);
+
+// Initializes a rectangle to an array
+void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height,GLfloat length,  point4 points[]);
+
+// Draws the rectangle
+void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z);
 
 
 
-GLsizei w=512, h=512;
+
 
 GLuint program;
 GLuint vao[2];
@@ -111,25 +118,14 @@ GLuint  ModelView, Projection, Transformation;
 GLfloat left = -10.0, right = 10.0, bottom = -10.0, top = 10.0;
 GLfloat  zNear = 5.0, zFar = 400;
 
+GLfloat aspect;
+
 // Coordinates of the camera
 GLfloat pos_x = -2.0;
 GLfloat pos_y = -15.0;
 GLfloat pos_z = -40.0;
 
-//// camera direction from the z-axis
-//GLfloat displacement_z = 6.0*DegreesToRadians;
-//GLfloat displacement_y = 30.0*DegreesToRadians;
 
-
-// Time Rotate Variables
-double TIME;
-double TIME_LAST;
-double DTIME;
-//Timer TM;
-double rotation;
-int FRAME_COUNT = 0;
-bool pause = false;
-bool detachCamera = false;
 
 // Define Colors
 const vec4 COLOR_RED = vec4(0.96,0.305,0.1056,1.0);
@@ -138,17 +134,13 @@ const vec4 COLOR_SWAMP = vec4( 0.523,0.95,0.7149,1.0);
 const vec4 COLOR_WHITE = vec4(0.94,0.996,1,1.0);
 const vec4 COLOR_BROWN = vec4(0.85, 0.6233, 0.425, 1.0);
 
+// Time Rotate Variables
+double TIME;
+double TIME_LAST;
+double DTIME;
+Timer TM;
 
-// Define Shading
-const GLint SHADE_NONE = 0;
-const GLint SHADE_FLAT = 1;
-const GLint SHADE_GOURAUD = 2;
-const GLint SHADE_PHONG = 3;
-const GLint SHADE_DULL = 4;
 
-// Define Moon Rotation
-const GLfloat ROTATION_MOON = 666;
-GLfloat aspect;
 
 //define crosshairs as a series of triangles
 point4 crosshairs[12] = {

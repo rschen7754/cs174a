@@ -17,7 +17,7 @@
 //    to the vertices
 
 
-void quad( int a, int b, int c, int d, point4 vertices[])
+void quad( int a, int b, int c, int d, point4 vertices[], point4 points[])
 {
     points[Index] = vertices[a]; Index++;
     points[Index] = vertices[b]; Index++;
@@ -29,26 +29,20 @@ void quad( int a, int b, int c, int d, point4 vertices[])
 }
 
 // Creates a cube given a set of vertices and color
-void colorcube(point4 vertices[], int indexColor)
+void colorcube(point4 vertices[], int indexColor, point4 points[])
 {
-    quad( 1, 0, 3, 2 ,vertices);
-    quad( 2, 3, 7, 6 ,vertices);
-    quad( 3, 0, 4, 7 ,vertices);
-    quad( 6, 5, 1, 2 ,vertices);
-    quad( 4, 5, 6, 7 ,vertices);
-    quad( 5, 4, 0, 1 ,vertices);
+    quad( 1, 0, 3, 2 ,vertices, points);
+    quad( 2, 3, 7, 6 ,vertices, points);
+    quad( 3, 0, 4, 7 ,vertices, points);
+    quad( 6, 5, 1, 2 ,vertices, points);
+    quad( 4, 5, 6, 7 ,vertices, points);
+    quad( 5, 4, 0, 1 ,vertices, points);
 }
+
 
 // Establishes cube vertices given an initial position
 void createCube(point4 cube[], int x, int y, int z, int width, int height, int length){
-    //    cube[0] = point4(x-2.5,y-2.5,z+2.5+length,1.0);
-    //    cube[1] = point4(x-2.5,y+2.5+height,z+2.5+length,1.0);
-    //    cube[2] = point4(x+2.5+width,y+2.5+height,z+2.5+length,1.0);
-    //    cube[3] = point4(x+2.5+width,y-2.5,z+2.5+length,1.0);
-    //    cube[4] = point4(x-2.5,y-2.5,z-2.5,1.0);
-    //    cube[5] = point4(x-2.5,y+2.5+height,z-2.5,1.0);
-    //    cube[6] = point4(x+2.5+width,y+2.5+height,z-2.5,1.0);
-    //    cube[7] = point4(x+2.5+width,y-2.5,z-2.5,1.0);
+    
     cube[0] = point4(x,y,z+5+length,1.0);
     cube[1] = point4(x,y+5+height,z+5+length,1.0);
     cube[2] = point4(x+5+width,y+5+height,z+5+length,1.0);
@@ -57,6 +51,41 @@ void createCube(point4 cube[], int x, int y, int z, int width, int height, int l
     cube[5] = point4(x,y+5+height,z,1.0);
     cube[6] = point4(x+5+width,y+5+height,z,1.0);
     cube[7] = point4(x+5+width,y,z,1.0);
+    
+}
+
+void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height,GLfloat length,  point4 points[])
+{
+    Index = 0;
+    createCube(cube, x, y, z,width,height, length);
+    colorcube(cube, 0, points);
+}
+
+// Draws a rectangle
+void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z)
+{
+
+    glUseProgram(program);
+    
+    // Create and initialize a buffer object
+    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices, NULL, GL_STATIC_DRAW );
+    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*NumVertices, points );
+    
+    // set up vertex arrays
+    glEnableVertexAttribArray( vPosition );
+    glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+    
+    // Create model_view matrix to transform and rotate the cubes
+    mat4  mv =Translate(pos_x, pos_y,pos_z)*Translate(x, y, z);
+    glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+    
+    // Define a viewing box
+    mat4 p = Perspective(45, aspect, zNear, zFar);
+    glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
+    glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, fColor);
+    
+    // Draw proper items
+    glDrawArrays( GL_TRIANGLES, 0, NumVertices );
     
 }
 
@@ -87,20 +116,28 @@ private:
     GLfloat m_posx;
     GLfloat m_posy;
     GLfloat m_posz;
-    bool m_isAlive;
     
+    bool m_isAlive;
     
 };
 
 Player::Player(int x, int y)
 {
-    m_posx = x;
-    m_posy = y;
-    m_posz = -20;
-    //
+    
+    m_posx = 0;
+    m_posy = 0;
+    m_posz = 0;
+    
     pos_x = -x-2.0;
     pos_y = -y-15.0;
     m_isAlive = true;
+    
+    
+    // Initialize Ship Rectangles
+    intializeRectangle(x, y, -20, 0,0,10, shipCenter);
+    intializeRectangle(x + 5, y, -20 +3, 0, -2,5, shipleft);
+    intializeRectangle(x-5, y, -20 +3, 0, -2, 5, shipRight);
+    
     
 }
 
@@ -119,8 +156,8 @@ void Player::move(int dir)
         m_posx += 5+5;
         pos_x -=5+5;
     }else if (dir == FORWARD){
-        m_posz -= 1;
-        pos_z += 1;
+        m_posz -= 0.08;
+        pos_z += 0.08;
     }
 }
 
@@ -147,48 +184,15 @@ bool Player:: didCollide(){
 }
 
 void Player::draw(){
-    
-    drawRectangle(m_posx, m_posy, m_posz, 0,0,10, vec4(1.0,0.0,0.0,1.0));
-    drawRectangle(m_posx + 5, m_posy, m_posz +3, 0, -2,5, vec4(0.0,1.0,0.0,1.0));
-    drawRectangle(m_posx-5, m_posy, m_posz +3, 0, -2, 5,vec4(0.0,1.0,0.0,1.0));
+    drawRectangle(shipleft, vec4(0.0,1.0,0.0,1.0), m_posx, m_posy, m_posz);
+    drawRectangle(shipCenter, vec4(1.0,0.0,0.0,1.0), m_posx, m_posy, m_posz);
+    drawRectangle(shipRight, vec4(0.0,1.0,0.0,1.0), m_posx, m_posy, m_posz);
     
 }
 
 
 // Initialize Player
 Player User(0,0);
-
-// Draws a rectangle
-void drawRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height,GLfloat length, vec4 fColor)
-{
-    Index = 0;
-    createCube(cube, x, y, z,width,height, length);
-    colorcube(cube, 0);
-    glUseProgram(program);
-    
-    // Create and initialize a buffer object
-    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices, NULL, GL_STATIC_DRAW );
-    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*NumVertices, points );
-    
-    // set up vertex arrays
-    glEnableVertexAttribArray( vPosition );
-    glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
-    
-    // Create model_view matrix to transform and rotate the cubes
-    mat4  mv =Translate(pos_x, pos_y,pos_z);
-    glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-    
-    // Define a viewing box
-    mat4 p = Perspective(45, aspect, zNear, zFar);
-    glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
-    glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, fColor);
-    
-    // Draw proper items
-    glDrawArrays( GL_TRIANGLES, 0, NumVertices );
-    
-}
-
-
 
 
 void init() {
@@ -201,31 +205,22 @@ void init() {
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
     
  
-    GLuint program = InitShader( "vshader.glsl", "fshader.glsl" );
-    glUseProgram(program);
+    program = InitShader( "vshader.glsl", "fshader.glsl" );
     
 	//data stored in "map" (20x10 array of integers);
 	//0 = no block, 1 = block present, 2 = start position
 
     readFile();
+    storeBlocks();
     
-    ModelView = glGetUniformLocation( program, "model_view" );
-    Projection = glGetUniformLocation( program, "projection" );
+    ModelView = glGetUniformLocation( program, "ModelView" );
+    Projection = glGetUniformLocation( program, "Projection" );
     
     // Place test blocks into blocks vector for collision detection
-    cubePos testBlock;
-    testBlock.x = 0;
-    testBlock.y = 10;
-    testBlock.z = -40;
-    cubePos testBlock2;
-    testBlock2.x = 0;
-    testBlock2.y = 40;
-    testBlock2.z = -40;
-    blocks.push_back(testBlock);
-    blocks.push_back(testBlock2);
     
     // Set black background
-    glClearColor( 0.0, 0.0, 0.0, 1.0 );
+  //  glClearColor( 0.0, 0.0, 0.0, 1.0 );
+      glClearColor( 1.0, 1.0, 1.0, 1.0 );
 
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
@@ -268,8 +263,7 @@ void displayHandler() {
     // Draw the Planets and the Sun
     // drawSun(); // Sun at 17,0,0
     User.draw();
-    drawRectangle(0, 10,-40, 0, 0, 0, vec4(0.0,0.0,1.0,1.0));
-    drawRectangle(0, 40,-40, 0, 0, 0, vec4(0.0,0.0,1.0,1.0));
+    drawRectangle(shipleft, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
     
     User.didCollide();
     glutSwapBuffers();
@@ -308,17 +302,8 @@ void keyHandler(unsigned char key, int x, int y) {
             pos_x = 0.0;
             pos_y = -110.0;
             pos_z = -250.0;
-            
-        case 'f':
-            User.move(FORWARD);
             break;
-            
-            break;
-        case 'p': // Pauses the entire scene
-            pause = !pause;
-            break;
-            break;
-            
+        
             
             
             
@@ -372,7 +357,15 @@ void motionHandler(int x, int y) {
     //score
 }
 void idleHandler() {
+    TIME = TM.GetElapsedTime() ;
     
+    DTIME = TIME - TIME_LAST;
+    TIME_LAST = TIME;
+    
+    if (static_cast<int>(DTIME) %10 == 0) {
+        User.move(FORWARD);
+        glutPostRedisplay();
+    }
 }
 
 int main(int argc, char** argv)

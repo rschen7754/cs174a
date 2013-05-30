@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A7CC53FA17580C84000024A6 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7CC53F817580C6E000024A6 /* Timer.cpp */; };
 		BC63B43B17508229007559CA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC63B43A17508229007559CA /* main.cpp */; };
 		BC63B43D17508229007559CA /* Final_Project.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = BC63B43C17508229007559CA /* Final_Project.1 */; };
 		BC63B44B17509B82007559CA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC63B44A17509B82007559CA /* OpenGL.framework */; };
@@ -36,6 +37,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A7CC53F817580C6E000024A6 /* Timer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
+		A7CC53F917580C6E000024A6 /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
 		BC63B43717508229007559CA /* Final Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Final Project"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC63B43A17508229007559CA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		BC63B43C17508229007559CA /* Final_Project.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Final_Project.1; sourceTree = "<group>"; };
@@ -123,6 +126,8 @@
 				BCCE33AC17542E380099B924 /* vshader.glsl */,
 				BC63B48917517E78007559CA /* tga.cpp */,
 				BC63B48A17517E78007559CA /* tga.h */,
+				A7CC53F817580C6E000024A6 /* Timer.cpp */,
+				A7CC53F917580C6E000024A6 /* Timer.h */,
 				BC63B43C17508229007559CA /* Final_Project.1 */,
 			);
 			path = "Final Project";
@@ -211,6 +216,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7CC53FA17580C84000024A6 /* Timer.cpp in Sources */,
 				BC63B43B17508229007559CA /* main.cpp in Sources */,
 				BC63B4551750A3C4007559CA /* InitShader.cpp in Sources */,
 				BC63B49217517E78007559CA /* tga.cpp in Sources */,

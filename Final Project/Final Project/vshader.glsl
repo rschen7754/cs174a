@@ -11,24 +11,33 @@ varying  vec3 fL;
 
 
 uniform mat4 ModelView;
-uniform mat4 View;
-uniform vec4 LightPosition;
+//uniform mat4 View;
+//uniform vec4 LightPosition;
 uniform mat4 Projection;
+
+// Collin's Code:
+uniform vec4 fcolor;
+varying vec4 color;
 
 void main()
 {
-    vec4 N = vec4(vNormal, 0.0f);
-    fN =  (ModelView * N).xyz; //not correct, should be inverse(transpose(ModelView)); only for version 150 or higher.
-    fE = -(ModelView * vPosition).xyz;
-    fL =  (LightPosition).xyz;
-    //fL = (View * LightPosition).xyz;
+//    vec4 N = vec4(vNormal, 0.0f);
+//    fN =  (ModelView * N).xyz; //not correct, should be inverse(transpose(ModelView)); only for version 150 or higher.
+//    fE = -(ModelView * vPosition).xyz;
+//    fL =  (LightPosition).xyz;
+//    //fL = (View * LightPosition).xyz;
+//
+//    if( LightPosition.w != 0.0 ) 
+//    {
+//        fL = LightPosition.xyz - vPosition.xyz;
+//    }
+//
+//    gl_Position = Projection * ModelView * vPosition;
+//    gl_TexCoord[0].xy = vTexCoords;
 
-    if( LightPosition.w != 0.0 ) 
-    {
-        fL = LightPosition.xyz - vPosition.xyz;
-    }
 
-    gl_Position = Projection * ModelView * vPosition;
-    gl_TexCoord[0].xy = vTexCoords;
+// Collin's Code:
+  gl_Position =  Projection*ModelView*vPosition;;
+  color = fcolor;
 }
 //
