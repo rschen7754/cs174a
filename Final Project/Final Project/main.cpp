@@ -142,6 +142,8 @@ bool Player:: didCollide(){
             return true;
         }
     }
+    
+    return false;
 }
 
 void Player::draw(){
@@ -245,6 +247,23 @@ void init() {
 
 void displayHandler() {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    mat4 p;
+    
+    //draw menu
+    if (menuState==MENU_ON) {
+        //orthographic projection
+        p = Ortho(-1.0, 1.0, -1.0, 1.0, 0.5, 3.0);
+        glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
+        
+        for (int i=0; i<12; i++) {
+            colors[i] = color4 (1.0, 1.0, 1.0, 1.0);
+        }
+        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(crosshairs), crosshairs );
+        glBufferSubData( GL_ARRAY_BUFFER, sizeof(points), sizeof(colors), colors );
+        
+        glDrawArrays( GL_TRIANGLES, 0, 12 );
+    }
     
     // Draw the Planets and the Sun
     // drawSun(); // Sun at 17,0,0

@@ -48,6 +48,8 @@
 
 
 const static int MENU_ON=1;
+const static int MENU_PLAY=2;
+const static int MENU_OVER=3;
 
 const int UP = 0;
 const int DOWN = 1;
@@ -147,6 +149,28 @@ const GLint SHADE_DULL = 4;
 // Define Moon Rotation
 const GLfloat ROTATION_MOON = 666;
 GLfloat aspect;
+
+//define crosshairs as a series of triangles
+point4 crosshairs[12] = {
+    point4( 1.0, 5.0,  0.0, 1.0 ),
+    point4( -1.0,  5.0, 0.0, 1.0 ),
+    point4( -1.0, -5.0, 0.0, 1.0 ),
+    
+    //next one
+    point4( -1.0, -5.0, 0.0, 1.0 ),
+    point4( 1.0, 5.0, 0.0, 1.0 ),
+    point4( 1.0, -5.0,  0.0, 1.0 ),
+    
+    //next one
+    point4( 5.0,  1.0, 0.0, 1.0 ),
+    point4(  5.0, -1.0, 0.0, 1.0 ),
+    point4( -5.0, 1.0, 0.0, 1.0 ),
+    
+    //last one
+    point4( -5.0, -1.0, 0.0, 1.0 ),
+    point4( -5.0, 1.0, 0.0, 1.0 ),
+    point4(  5.0, -1.0, 0.0, 1.0 )
+};
 
 
 #endif
