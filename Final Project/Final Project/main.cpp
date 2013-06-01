@@ -359,6 +359,10 @@ void keyHandler(unsigned char key, int x, int y) {
         case 13: //hitting enter
             menuState = MENU_PLAY;
             TM.Reset();
+            if (menuState != MENU_PLAY) {
+                menuState = MENU_PLAY;
+                TM.Reset();
+            }
             break;
             
         default:
