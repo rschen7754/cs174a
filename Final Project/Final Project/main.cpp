@@ -458,14 +458,7 @@ void displayHandler() {
         p = Ortho(2*left, 2*right, 2*bottom, 2*top, zNear, zFar);
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
         
-        
-        glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, COLOR_MENU);
-        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
-        
-        //kept drawing on top of the text :(
-       // glDrawArrays( GL_TRIANGLES, 0, 6 ); 
-        
-        mv =Translate(pos_x+2.5, pos_y,pos_z);
+        mat4 mv =Translate(pos_x+2.5, pos_y,pos_z);
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
         
         glutPrint(-5.5,20, "Welcome to SpaceRunner!", 1, 1, 1, 1);
@@ -613,7 +606,7 @@ int main(int argc, char** argv)
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition (0, 0);
     glutInitWindowSize(Width,Height);
-    glutCreateWindow( "Game");
+    glutCreateWindow( "SpaceRunner");
     //printf("GL version %s\n", glGetString(GL_VERSION));
     glewExperimental = GL_TRUE;
     glewInit();
