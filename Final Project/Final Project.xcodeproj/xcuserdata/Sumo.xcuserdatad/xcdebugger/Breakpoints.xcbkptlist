@@ -8,11 +8,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Final Project/main.cpp"
-         timestampString = "391820249.709653"
+         timestampString = "391823731.747051"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "582"
-         endingLineNumber = "582">
+         startingLineNumber = "630"
+         endingLineNumber = "630"
+         landmarkName = "main(int argc, char** argv)"
+         landmarkType = "7">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>

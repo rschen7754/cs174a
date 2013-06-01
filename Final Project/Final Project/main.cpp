@@ -131,6 +131,15 @@ public:
     // Gets the y position of the ship
     GLfloat getY();
     
+    // Get the x position of the ship
+    GLfloat getX();
+    
+    // Get the value of the width counter
+    GLfloat getOldX();
+    
+    // Round Positions to Integer Value
+    void RoundPositions();
+    
     // Draw Ship
     void draw();
     
@@ -141,8 +150,10 @@ private:
     GLfloat m_posz;
     
     bool m_isAlive;
-    bool m_animationStatus;
+    int m_animationStatus;
     int m_heightLevel;
+    GLfloat m_oldx;
+    
     
 };
 
@@ -157,7 +168,8 @@ Player::Player(int x, int y)
     pos_y = -y-15.0;
     m_isAlive = true;
     m_heightLevel = HEIGHT_CENTER;
-    
+    m_animationStatus = ANIMATE_NONE;
+    m_oldx = m_posx;
     
     // Initialize Ship Rectangles
     intializeRectangle(x, y, -20, 0,0,10, shipCenter);
@@ -168,22 +180,19 @@ Player::Player(int x, int y)
 
 void Player::move(int dir)
 {
+    GLfloat speed = 1.7;
     if (dir == UP) {
-//        m_posy += 15;
-//        pos_y -= 15;
-        m_posy += DTIME*100;
-        pos_y -= DTIME*100;
+        m_posy += DTIME*100*speed;
+        pos_y -= DTIME*100*speed;
     }else if (dir == DOWN){
-//        m_posy -= 15;
-//        pos_y += 15;
-        m_posy -= DTIME*100;
-        pos_y += DTIME*100;
+        m_posy -= DTIME*100*speed;
+        pos_y += DTIME*100*speed;
     }else if (dir == LEFT){
-        m_posx -= 20+5;
-        pos_x += 20+5;
+        m_posx -= DTIME*100*speed;
+        pos_x += DTIME*100*speed;
     }else if (dir == RIGHT){
-        m_posx += 20+5;
-        pos_x -=20+5;
+        m_posx += DTIME * 100*speed;
+        pos_x -= DTIME * 100*speed;
     }else if (dir == FORWARD){
         m_posz -= DTIME*100;
         pos_z += DTIME*100;
@@ -207,19 +216,44 @@ int Player::getAnimationStatus()
 
 void Player::setAnimationStatus(int status)
 {
+    if(status == ANIMATE_LEFT || status == ANIMATE_RIGHT)
+    {
+        m_oldx = m_posx;
+    }else if (status == ANIMATE_NONE){
+        RoundPositions();
+    }
     m_animationStatus = status;
+
+}
+
+GLfloat Player::getOldX()
+{
+    return m_oldx;
 }
 
 GLfloat Player::getY(){
     return m_posy;
 }
 
+GLfloat Player::getX(){
+    return m_posx;
+}
+
 void Player::setDead(){
     m_isAlive = false;
+    glutPostRedisplay();
 }
 
 bool Player::isAlive(){
     return m_isAlive;
+}
+
+void Player::RoundPositions()
+{
+    m_posx = static_cast<int>(m_posx);
+    m_posy = static_cast<int>(m_posy);
+    pos_x = static_cast<int>(pos_x);
+    pos_y = static_cast<int>(pos_y);
 }
 
 bool Player:: didCollide(){
@@ -231,7 +265,6 @@ bool Player:: didCollide(){
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
             (m_posz -30< blocks[i].z && m_posz > blocks[i].z+5)) {
             setDead();
-            std::cerr << "dead";
             menuState = MENU_OVER;
             return true;
         }
@@ -334,16 +367,6 @@ void init() {
     glEnable(GL_DEPTH_TEST);
 }
 
-//// Here are the fonts:
-//LPVOID glutFonts[7] = {
-//    GLUT_BITMAP_9_BY_15,
-//    GLUT_BITMAP_8_BY_13,
-//    GLUT_BITMAP_TIMES_ROMAN_10,
-//    GLUT_BITMAP_TIMES_ROMAN_24,
-//    GLUT_BITMAP_HELVETICA_10,
-//    GLUT_BITMAP_HELVETICA_12,
-//    GLUT_BITMAP_HELVETICA_18
-//};
 
 // Here is the function
 void glutPrint(float x, float y, char* text, float r, float g, float b, float a)
@@ -363,9 +386,7 @@ void glutPrint(float x, float y, char* text, float r, float g, float b, float a)
 
 void displayHandler() {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    
-//    glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, 'c');
-    glutPrint(10,10, "hello", 1, 1, 1, 1);
+
     
     mat4 p;
     
@@ -373,7 +394,7 @@ void displayHandler() {
         drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), blocks[i].x, blocks[i].y, blocks[i].z);
     }
     
-                std::cerr << "hello" << User.getAnimationStatus();
+    
     if (User.getAnimationStatus() == ANIMATE_UP) {
         if (User.getHeightLevel() == HEIGHT_BOTTOM) {
             if (User.getY() <=0) {
@@ -403,6 +424,27 @@ void displayHandler() {
                 User.setHeightLevel(HEIGHT_CENTER);
                 User.setAnimationStatus(ANIMATE_NONE);
             }
+        }else if (User.getHeightLevel() == HEIGHT_CENTER)
+        {
+            if (User.getY() >= -15) {
+                User.move(DOWN);
+            }else{
+                User.setHeightLevel(HEIGHT_BOTTOM);
+                User.setAnimationStatus(ANIMATE_NONE);
+            }
+        }
+    }else if (User.getAnimationStatus() == ANIMATE_LEFT){
+        if (static_cast<int>(User.getX())  >= static_cast<int>(User.getOldX()) -24) {
+            User.move(LEFT);
+        }else{
+            User.setAnimationStatus(ANIMATE_NONE);
+        }
+    }else if (User.getAnimationStatus() == ANIMATE_RIGHT)
+    {
+        if (static_cast<int>(User.getX())  <= static_cast<int>(User.getOldX())  + 24) {
+            User.move(RIGHT);
+        }else{
+            User.setAnimationStatus(ANIMATE_NONE);
         }
     }
     
@@ -508,23 +550,27 @@ void specialHandler(int key, int x, int y)
 {
     if (menuState != MENU_PLAY)
         return;
+    if (User.getAnimationStatus() == ANIMATE_NONE) {
     switch (key) {
+            
+         
         case GLUT_KEY_UP: // Moves the camera up
-//            User.move(UP);
             User.setAnimationStatus(ANIMATE_UP);
             break;
         case GLUT_KEY_DOWN: // Moves the camera down
             User.setAnimationStatus(ANIMATE_DOWN);
             break;
         case GLUT_KEY_LEFT: // Turns the camera left
-            User.move(LEFT);
+            User.setAnimationStatus(ANIMATE_LEFT);
             break;
         case GLUT_KEY_RIGHT: // Turns the camera right
-            User.move(RIGHT);
+            User.setAnimationStatus(ANIMATE_RIGHT);
             break;
             
         default:
             break;
+            
+    }
     }
     
     glutPostRedisplay();
@@ -548,8 +594,6 @@ void idleHandler() {
     
         User.move(FORWARD);
         glutPostRedisplay();
-    
-
     }
 }
 
