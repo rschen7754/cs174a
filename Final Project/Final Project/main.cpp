@@ -451,9 +451,7 @@ void displayHandler() {
     
     //draw menu
     if (menuState==MENU_ON || menuState == MENU_OVER) {
-        mat4  mv =Translate(0, 0,pos_z);
-        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-
+        
         //orthographic projection
         p = Ortho(2*left, 2*right, 2*bottom, 2*top, zNear, zFar);
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
