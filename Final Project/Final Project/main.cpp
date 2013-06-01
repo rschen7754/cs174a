@@ -362,10 +362,7 @@ void idleHandler() {
     User.move(FORWARD);
     glutPostRedisplay();
     
-//    if (static_cast<int>(DTIME) %10 == 0) {
-//        User.move(FORWARD);
-//        glutPostRedisplay();
-//    }
+
 }
 
 int main(int argc, char** argv)
