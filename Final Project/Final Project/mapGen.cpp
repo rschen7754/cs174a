@@ -1,6 +1,7 @@
 
 #include "iostream"
 #include "fstream"
+#include <vector>
 //#include "main.h"
 using namespace std;
 
@@ -90,27 +91,26 @@ bool readFile()
 	return true;
 }
 
-void storeBlocks()
+void storeBlocks(vector<float> xPos, vector<float>yPos, vector<float>zPos)
 {
-//	cubePos tempBlock;
-//	for (int i = 0; i < MAXROWS; i++)
-//	{
-//		for (int j = 0; j< MAXCOLS-10; j++)
-//		{
-//			if (map[i][j] == 1)
-//			{
-//				tempBlock.x = i*5; //left and right
-//				tempBlock.z = j*5; //into the screen
-//				int randomNum = (rand() % 3);
-//				if (randomNum == 0)
-//					tempBlock.y = -15; // vertical position
-//				else if (randomNum == 1)
-//					tempBlock.y = 0;
-//				else
-//					tempBlock.z = 15;
-//
-//				blocks.push_back(tempBlock);
-//			}
-//		}
-//	}
+	//cubePos tempBlock;
+	for (int i = 0; i < MAXROWS; i++)
+	{
+		for (int j = 0; j< MAXCOLS-10; j++)
+		{
+			if (map[i][j] == 1)
+			{
+				xPos.push_back = (float)(i*5); //left and right
+				zPos.push_back = (float)(j*5); //into the screen
+				int randomNum = (rand() % 3);
+				if (randomNum == 0)
+					yPos.push_back = -15; // vertical position
+				else if (randomNum == 1)
+					yPos.push_back = 0;
+				else
+					yPos.push_back = 15;
+
+			}
+		}
+	}
 }
