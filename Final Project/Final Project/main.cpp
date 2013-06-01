@@ -397,14 +397,14 @@ void motionHandler(int x, int y) {
 }
 void idleHandler() {
     if (menuState==MENU_PLAY) {
-    TIME = TM.GetElapsedTime() ;
+        TIME = TM.GetElapsedTime() ;
     
-    DTIME = TIME - TIME_LAST;
-    TIME_LAST = TIME;
+        DTIME = TIME - TIME_LAST;
+        TIME_LAST = TIME;
     
     
-    User.move(FORWARD);
-    glutPostRedisplay();
+        User.move(FORWARD);
+        glutPostRedisplay();
     
 //    if (static_cast<int>(DTIME) %10 == 0) {
 //        User.move(FORWARD);
