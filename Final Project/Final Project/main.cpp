@@ -172,12 +172,15 @@ bool Player::isAlive(){
 }
 
 bool Player:: didCollide(){
+    if (menuState==MENU_ON)
+        return false;
     for (int i = 0; i < blocks.size(); i++) {
         if ((m_posx+10 > blocks[i].x && m_posx-5 < blocks[i].x+5) &&
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
             (m_posz -6 < blocks[i].z && m_posz > blocks[i].z-5)) {
             setDead();
             std::cerr << "dead";
+            menuState = MENU_OVER;
             return true;
         }
     }
@@ -248,15 +251,6 @@ void displayHandler() {
     
     mat4 p;
     
-    //draw menu
-    if (menuState==MENU_ON) {
-        //orthographic projection
-        p = Ortho(-1.0, 1.0, -1.0, 1.0, 0.5, 3.0);
-        glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
-        
-        glDrawArrays( GL_TRIANGLES, 0, 12 );
-    }
-    
     // Draw the Planets and the Sun
 
     User.draw();
@@ -265,10 +259,26 @@ void displayHandler() {
     drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
     
     User.didCollide();
+    
+    //draw menu
+    if (menuState==MENU_ON) {
+        //orthographic projection
+        p = Ortho(left, right, bottom, top, zNear, zFar);
+        glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
+    
+        
+        glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, COLOR_BLUE);
+        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(crosshairs), crosshairs );
+        
+        glDrawArrays( GL_TRIANGLES, 0, 12 );
+    }
     glutSwapBuffers();
 }
 
 void keyHandler(unsigned char key, int x, int y) {
+    
+    if (menuState != MENU_PLAY && key != 'q' && key != 'Q' && key != 13)
+        return;
     
     switch (key) {
             
@@ -306,6 +316,10 @@ void keyHandler(unsigned char key, int x, int y) {
         case 'q':
         case 'Q':
             exit(0);
+            break;
+            
+        case 13: //hitting enter
+            menuState = MENU_PLAY;
             break;
             
         default:
