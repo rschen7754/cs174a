@@ -79,6 +79,7 @@ point4 cube[8];
 point4 shipleft[NumVertices];
 point4 shipRight[NumVertices];
 point4 shipCenter[NumVertices];
+point4 blockModel[NumVertices];
 
 
 struct cubePos {

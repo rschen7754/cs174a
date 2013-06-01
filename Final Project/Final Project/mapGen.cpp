@@ -91,7 +91,7 @@ bool readFile()
 	return true;
 }
 
-void storeBlocks(vector<float> xPos, vector<float>yPos, vector<float>zPos)
+void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 {
 	//cubePos tempBlock;
 	for (int i = 0; i < MAXROWS; i++)
@@ -100,8 +100,8 @@ void storeBlocks(vector<float> xPos, vector<float>yPos, vector<float>zPos)
 		{
 			if (map[i][j] == 1)
 			{
-				xPos.push_back((float)(i*5)); //left and right
-				zPos.push_back((float)(j*5)); //into the screen
+				xPos.push_back((float)(i*25-100)); //left and right
+				zPos.push_back((float)(j*50+300)); //into the screen
 				int randomNum = (rand() % 3);
 				if (randomNum == 0)
 					yPos.push_back(-15); // vertical position
@@ -109,8 +109,10 @@ void storeBlocks(vector<float> xPos, vector<float>yPos, vector<float>zPos)
 					yPos.push_back(0);
 				else
 					yPos.push_back(15);
+                
 
 			}
 		}
 	}
+    
 }

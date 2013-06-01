@@ -8,6 +8,16 @@
 
 #include "main.h"
 
+const int ANIMATE_NONE = 0;
+const int ANIMATE_UP = 1;
+const int ANIMATE_DOWN = 2;
+const int ANIMATE_RIGHT = 3;
+const int ANIMATE_LEFT = 4;
+
+
+const int HEIGHT_BOTTOM = 0;
+const int HEIGHT_CENTER = 1;
+const int HEIGHT_TOP = 2;
 
 
 //==============================================
@@ -65,8 +75,6 @@ void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat 
 void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z)
 {
 
-
-    
     // Create and initialize a buffer object
     glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices, NULL, GL_STATIC_DRAW );
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*NumVertices, points );
@@ -108,6 +116,21 @@ public:
     // Determine if player collided with a block
     bool didCollide();
     
+    // Get animation status
+    int getAnimationStatus();
+    
+    // Set animation Status
+    void setAnimationStatus(int status);
+    
+    // Get Height Level
+    int getHeightLevel();
+    
+    // Set Height Level
+    void setHeightLevel(int height);
+    
+    // Gets the y position of the ship
+    GLfloat getY();
+    
     // Draw Ship
     void draw();
     
@@ -118,6 +141,8 @@ private:
     GLfloat m_posz;
     
     bool m_isAlive;
+    bool m_animationStatus;
+    int m_heightLevel;
     
 };
 
@@ -131,6 +156,7 @@ Player::Player(int x, int y)
     pos_x = -x-2.0;
     pos_y = -y-15.0;
     m_isAlive = true;
+    m_heightLevel = HEIGHT_CENTER;
     
     
     // Initialize Ship Rectangles
@@ -138,29 +164,54 @@ Player::Player(int x, int y)
     intializeRectangle(x + 5, y, -20 +3, 0, -2,5, shipleft);
     intializeRectangle(x-5, y, -20 +3, 0, -2, 5, shipRight);
     
-    
 }
 
 void Player::move(int dir)
 {
     if (dir == UP) {
-        m_posy += 5;
-        pos_y -= 5;
+//        m_posy += 15;
+//        pos_y -= 15;
+        m_posy += DTIME*100;
+        pos_y -= DTIME*100;
     }else if (dir == DOWN){
-        m_posy -= 5;
-        pos_y += 5;
+//        m_posy -= 15;
+//        pos_y += 15;
+        m_posy -= DTIME*100;
+        pos_y += DTIME*100;
     }else if (dir == LEFT){
-        m_posx -= 5+5;
-        pos_x += 5+5;
+        m_posx -= 20+5;
+        pos_x += 20+5;
     }else if (dir == RIGHT){
-        m_posx += 5+5;
-        pos_x -=5+5;
+        m_posx += 20+5;
+        pos_x -=20+5;
     }else if (dir == FORWARD){
-//        m_posz -= 0.08;
-//        pos_z += 0.08;
         m_posz -= DTIME*100;
         pos_z += DTIME*100;
     }
+}
+
+int Player::getHeightLevel()
+{
+    return m_heightLevel;
+}
+
+void Player::setHeightLevel(int height)
+{
+    m_heightLevel = height;
+}
+
+int Player::getAnimationStatus()
+{
+    return m_animationStatus;
+}
+
+void Player::setAnimationStatus(int status)
+{
+    m_animationStatus = status;
+}
+
+GLfloat Player::getY(){
+    return m_posy;
 }
 
 void Player::setDead(){
@@ -178,16 +229,21 @@ bool Player:: didCollide(){
     for (int i = 0; i < blocks.size(); i++) {
         if ((m_posx+10 > blocks[i].x && m_posx-5 < blocks[i].x+5) &&
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
-            (m_posz -6 < blocks[i].z && m_posz > blocks[i].z-5)) {
+            (m_posz -30< blocks[i].z && m_posz > blocks[i].z+5)) {
             setDead();
             std::cerr << "dead";
             menuState = MENU_OVER;
             return true;
         }
+
+
+        
     }
     
     return false;
 }
+
+
 
 void Player::draw(){
     drawRectangle(shipleft, COLOR_BLUE, m_posx, m_posy, m_posz);
@@ -202,6 +258,9 @@ Player User(0,0);
 
 
 void init() {
+    
+    // Initialize 5x5 Blocks
+    intializeRectangle(0, 0, 0, 0, 0, 0, blockModel);
     
     glGenVertexArraysAPPLE(1, &vao[0]);
     glBindVertexArrayAPPLE(vao[0]);
@@ -227,10 +286,11 @@ void init() {
 	for (int i = 0; i < numBlocks; i++)
 	{
 		cubePos tempBlock;
-		tempBlock.x = xPos[i];
+		tempBlock.x = -xPos[i];
 		tempBlock.y = yPos[i];
-		tempBlock.z = zPos[i];
+		tempBlock.z = -zPos[i];
 		blocks.push_back(tempBlock);
+
 	}
 
     ModelView = glGetUniformLocation( program, "ModelView" );
@@ -274,12 +334,78 @@ void init() {
     glEnable(GL_DEPTH_TEST);
 }
 
+//// Here are the fonts:
+//LPVOID glutFonts[7] = {
+//    GLUT_BITMAP_9_BY_15,
+//    GLUT_BITMAP_8_BY_13,
+//    GLUT_BITMAP_TIMES_ROMAN_10,
+//    GLUT_BITMAP_TIMES_ROMAN_24,
+//    GLUT_BITMAP_HELVETICA_10,
+//    GLUT_BITMAP_HELVETICA_12,
+//    GLUT_BITMAP_HELVETICA_18
+//};
+
+// Here is the function
+void glutPrint(float x, float y, char* text, float r, float g, float b, float a)
+{
+    if(!text || !strlen(text)) return;
+    bool blending = false;
+    if(glIsEnabled(GL_BLEND)) blending = true;
+    glEnable(GL_BLEND);
+    glColor4f(r,g,b,a);
+    glRasterPos2f(x,y);
+    while (*text) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text);
+        text++;
+    }
+    if(!blending) glDisable(GL_BLEND);
+}
+
 void displayHandler() {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
+//    glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, 'c');
+    glutPrint(10,10, "hello", 1, 1, 1, 1);
+    
     mat4 p;
     
-    //should go inside else
+    for (int i = 0; i < blocks.size(); i++) {
+        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), blocks[i].x, blocks[i].y, blocks[i].z);
+    }
+    
+                std::cerr << "hello" << User.getAnimationStatus();
+    if (User.getAnimationStatus() == ANIMATE_UP) {
+        if (User.getHeightLevel() == HEIGHT_BOTTOM) {
+            if (User.getY() <=0) {
+                User.move(UP);
+            }else{
+                User.setHeightLevel(HEIGHT_CENTER);
+                User.setAnimationStatus(ANIMATE_NONE);
+            }
+        }
+        else if(User.getHeightLevel() == HEIGHT_CENTER){
+            if (User.getY() <=15) {
+                User.move(UP);
+            }else{
+                User.setHeightLevel(HEIGHT_TOP);
+                User.setAnimationStatus(ANIMATE_NONE);
+            }
+
+        }
+
+    }else if (User.getAnimationStatus() == ANIMATE_DOWN)
+    {
+
+        if (User.getHeightLevel() == HEIGHT_TOP) {
+            if (User.getY()>=0) {
+                User.move(DOWN);
+            }else{
+                User.setHeightLevel(HEIGHT_CENTER);
+                User.setAnimationStatus(ANIMATE_NONE);
+            }
+        }
+    }
+    
     User.draw();
     
     //draw menu
@@ -300,12 +426,13 @@ void displayHandler() {
     }
     
     else {
-        
-        // Draw the Planets and the Sun
+        //should go inside else
 
-        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
-        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
-        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
+//        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
+//        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
+//        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
+        
+
     
         User.didCollide();
     }
@@ -383,10 +510,11 @@ void specialHandler(int key, int x, int y)
         return;
     switch (key) {
         case GLUT_KEY_UP: // Moves the camera up
-            User.move(UP);
+//            User.move(UP);
+            User.setAnimationStatus(ANIMATE_UP);
             break;
         case GLUT_KEY_DOWN: // Moves the camera down
-            User.move(DOWN);
+            User.setAnimationStatus(ANIMATE_DOWN);
             break;
         case GLUT_KEY_LEFT: // Turns the camera left
             User.move(LEFT);
