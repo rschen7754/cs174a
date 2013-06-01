@@ -174,6 +174,7 @@ bool Player::isAlive(){
 bool Player:: didCollide(){
     if (menuState==MENU_ON)
         return false;
+    
     for (int i = 0; i < blocks.size(); i++) {
         if ((m_posx+10 > blocks[i].x && m_posx-5 < blocks[i].x+5) &&
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
@@ -251,27 +252,39 @@ void displayHandler() {
     
     mat4 p;
     
+    //should go inside else
+    User.draw();
+    
+    //draw menu
+    if (menuState==MENU_ON || menuState == MENU_OVER) {
+        
+        //need to fix this
+        
+        //mat4  mv =Translate(0,0,0);
+        //glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv ); 
+
+        //orthographic projection
+        p = Ortho(2*left, 2*right, 2*bottom, 2*top, zNear, zFar);
+        glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
+        
+        
+        glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, COLOR_MENU);
+        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
+        
+        glDrawArrays( GL_TRIANGLES, 0, 12 );
+    }
+    
+    else {
     // Draw the Planets and the Sun
 
-    User.draw();
+    
     drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
     drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
     drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
     
     User.didCollide();
-    
-    //draw menu
-    if (menuState==MENU_ON) {
-        //orthographic projection
-        p = Ortho(left, right, bottom, top, zNear, zFar);
-        glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
-    
-        
-        glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, COLOR_BLUE);
-        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(crosshairs), crosshairs );
-        
-        glDrawArrays( GL_TRIANGLES, 0, 12 );
     }
+    
     glutSwapBuffers();
 }
 

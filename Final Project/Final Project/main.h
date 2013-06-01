@@ -133,6 +133,7 @@ const vec4 COLOR_BLUE = vec4(0.5376,0.96,0.9459,1.0);
 const vec4 COLOR_SWAMP = vec4( 0.523,0.95,0.7149,1.0);
 const vec4 COLOR_WHITE = vec4(0.94,0.996,1,1.0);
 const vec4 COLOR_BROWN = vec4(0.85, 0.6233, 0.425, 1.0);
+const vec4 COLOR_MENU = vec4(0.2,0.2,0.9459,1.0);
 
 
 
@@ -145,7 +146,7 @@ Timer TM;
 
 
 //define crosshairs as a series of triangles
-point4 crosshairs[12] = {
+point4 menuBox[12] = {
     point4( 1.0, 5.0,  0.0, 1.0 ),
     point4( -1.0,  5.0, 0.0, 1.0 ),
     point4( -1.0, -5.0, 0.0, 1.0 ),
