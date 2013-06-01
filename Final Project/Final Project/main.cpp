@@ -172,7 +172,7 @@ bool Player::isAlive(){
 }
 
 bool Player:: didCollide(){
-    if (menuState==MENU_ON)
+    if (menuState==MENU_ON || menuState==MENU_OVER)
         return false;
     
     for (int i = 0; i < blocks.size(); i++) {
@@ -273,8 +273,9 @@ void displayHandler() {
         
         //need to fix this
         
-        //mat4  mv =Translate(0,0,0);
-        //glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv ); 
+        //mat4 oldmv = ModelView;
+        mat4  mv =Translate(pos_x+2.5, pos_y+15,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
 
         //orthographic projection
         p = Ortho(2*left, 2*right, 2*bottom, 2*top, zNear, zFar);
@@ -284,7 +285,9 @@ void displayHandler() {
         glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, COLOR_MENU);
         glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
         
-        glDrawArrays( GL_TRIANGLES, 0, 12 );
+        glDrawArrays( GL_TRIANGLES, 0, 6 );
+       // mv=oldmv;
+       // glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
     }
     
     else {
@@ -393,6 +396,7 @@ void motionHandler(int x, int y) {
     //score
 }
 void idleHandler() {
+    if (menuState==MENU_PLAY) {
     TIME = TM.GetElapsedTime() ;
     
     DTIME = TIME - TIME_LAST;
@@ -406,6 +410,7 @@ void idleHandler() {
 //        User.move(FORWARD);
 //        glutPostRedisplay();
 //    }
+    }
 }
 
 int main(int argc, char** argv)
