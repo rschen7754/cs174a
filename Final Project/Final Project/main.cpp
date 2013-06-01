@@ -227,9 +227,9 @@ void init() {
 	for (int i = 0; i < numBlocks; i++)
 	{
 		cubePos tempBlock;
-		cubePos.x = xPos[i];
-		cubePos.y = yPos[i];
-		cubePos.z = zPos[i];
+		tempBlock.x = xPos[i];
+		tempBlock.y = yPos[i];
+		tempBlock.z = zPos[i];
 		blocks.push_back(tempBlock);
 	}
 
