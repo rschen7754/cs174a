@@ -241,6 +241,20 @@ void init() {
     // Set black background
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
    //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
+    
+    TgaImage menuImage;
+    if (!menuImage.loadTGA("menu.tga"))
+    {
+        printf("Error loading image file menu\n");
+        exit(1);
+    }
+    
+    TgaImage gameoverImage;
+    if (!gameoverImage.loadTGA("gameover.tga"))
+    {
+        printf("Error loading image file gameover\n");
+        exit(1);
+    }
 
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
@@ -271,9 +285,6 @@ void displayHandler() {
     //draw menu
     if (menuState==MENU_ON || menuState == MENU_OVER) {
         
-        //need to fix this
-        
-        //mat4 oldmv = ModelView;
         mat4  mv =Translate(pos_x+2.5, pos_y+15,pos_z);
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
 
@@ -286,19 +297,17 @@ void displayHandler() {
         glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
         
         glDrawArrays( GL_TRIANGLES, 0, 6 );
-       // mv=oldmv;
-       // glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
     }
     
     else {
-    // Draw the Planets and the Sun
+        
+        // Draw the Planets and the Sun
 
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
     
-    drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
-    drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
-    drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
-    
-    User.didCollide();
+        User.didCollide();
     }
     
     glutSwapBuffers();
@@ -349,6 +358,7 @@ void keyHandler(unsigned char key, int x, int y) {
             
         case 13: //hitting enter
             menuState = MENU_PLAY;
+            TM.Reset();
             break;
             
         default:

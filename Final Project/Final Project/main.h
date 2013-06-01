@@ -99,10 +99,6 @@ void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat 
 // Draws the rectangle
 void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z);
 
-
-
-
-
 GLuint program;
 GLuint vao[2];
 GLuint vPosition;
@@ -156,6 +152,9 @@ point4 menuBox[12] = {
     point4( 10.0, 5.0, 0.0, 1.0 ),
     point4( 10.0, -5.0,  0.0, 1.0 ),
 };
+
+GLuint texture_menu;
+GLuint texture_gameover;
 
 
 #endif
