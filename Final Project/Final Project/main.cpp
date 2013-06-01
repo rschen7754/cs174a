@@ -345,14 +345,13 @@ void init() {
 //    GLUT_BITMAP_HELVETICA_18
 //};
 
-// Here is the function
 void glutPrint(float x, float y, char* text, float r, float g, float b, float a)
 {
     if(!text || !strlen(text)) return;
     bool blending = false;
     if(glIsEnabled(GL_BLEND)) blending = true;
     glEnable(GL_BLEND);
-    glColor4f(r,g,b,a);
+    glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, color4(r,g,b,a));
     glRasterPos2f(x,y);
     while (*text) {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text);
@@ -364,8 +363,7 @@ void glutPrint(float x, float y, char* text, float r, float g, float b, float a)
 void displayHandler() {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
-//    glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, 'c');
-    glutPrint(10,10, "hello", 1, 1, 1, 1);
+    
     
     mat4 p;
     
@@ -423,6 +421,9 @@ void displayHandler() {
         glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
         
         glDrawArrays( GL_TRIANGLES, 0, 6 );
+        
+        glutPrint(10,10, "Welcome to OurGame!", 1, 1, 1, 1);
+        
     }
     
     else {
@@ -484,8 +485,6 @@ void keyHandler(unsigned char key, int x, int y) {
             break;
             
         case 13: //hitting enter
-            menuState = MENU_PLAY;
-            TM.Reset();
             if (menuState != MENU_PLAY) {
                 menuState = MENU_PLAY;
                 TM.Reset();
