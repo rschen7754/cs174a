@@ -217,9 +217,9 @@ void init() {
 	//data stored in "map" (20x10 array of integers);
 	//0 = no block, 1 = block present, 2 = start position
 
-	vector<float> xPos;
-	vector<float> yPos;
-	vector<float> zPos;
+	std::vector<float> xPos;
+	std::vector<float> yPos;
+	std::vector<float> zPos;
     readFile();
     storeBlocks(xPos, yPos, zPos);
 	int numBlocks = xPos.size();

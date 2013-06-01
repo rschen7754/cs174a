@@ -100,15 +100,15 @@ void storeBlocks(vector<float> xPos, vector<float>yPos, vector<float>zPos)
 		{
 			if (map[i][j] == 1)
 			{
-				xPos.push_back = (float)(i*5); //left and right
-				zPos.push_back = (float)(j*5); //into the screen
+				xPos.push_back((float)(i*5)); //left and right
+				zPos.push_back((float)(j*5)); //into the screen
 				int randomNum = (rand() % 3);
 				if (randomNum == 0)
-					yPos.push_back = -15; // vertical position
+					yPos.push_back(-15); // vertical position
 				else if (randomNum == 1)
-					yPos.push_back = 0;
+					yPos.push_back(0);
 				else
-					yPos.push_back = 15;
+					yPos.push_back(15);
 
 			}
 		}
