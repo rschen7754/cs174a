@@ -375,7 +375,8 @@ void reshapeHandler(int width, int height) {
 
 void specialHandler(int key, int x, int y)
 {
-    
+    if (menuState != MENU_PLAY)
+        return;
     switch (key) {
         case GLUT_KEY_UP: // Moves the camera up
             User.move(UP);
