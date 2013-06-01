@@ -368,14 +368,13 @@ void init() {
 }
 
 
-// Here is the function
 void glutPrint(float x, float y, char* text, float r, float g, float b, float a)
 {
     if(!text || !strlen(text)) return;
     bool blending = false;
     if(glIsEnabled(GL_BLEND)) blending = true;
     glEnable(GL_BLEND);
-    glColor4f(r,g,b,a);
+    glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, color4(r,g,b,a));
     glRasterPos2f(x,y);
     while (*text) {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text);
@@ -452,8 +451,7 @@ void displayHandler() {
     
     //draw menu
     if (menuState==MENU_ON || menuState == MENU_OVER) {
-        
-        mat4  mv =Translate(pos_x+2.5, pos_y+15,pos_z);
+        mat4  mv =Translate(0, 0,pos_z);
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
 
         //orthographic projection
@@ -464,15 +462,25 @@ void displayHandler() {
         glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, COLOR_MENU);
         glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
         
-        glDrawArrays( GL_TRIANGLES, 0, 6 );
+        //kept drawing on top of the text :(
+       // glDrawArrays( GL_TRIANGLES, 0, 6 ); 
+        
+        mv =Translate(pos_x+2.5, pos_y,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+        
+        glutPrint(-5.5,20, "Welcome to SpaceRunner!", 1, 1, 1, 1);
+        
+        mv =Translate(pos_x+2.5, pos_y+15,pos_z);
+        glutPrint(-4.5,17, "Press Enter to begin.", 1, 1, 1, 1);
+        
     }
     
     else {
         //should go inside else
 
-//        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
-//        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
-//        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
+        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
         
 
     
@@ -526,8 +534,6 @@ void keyHandler(unsigned char key, int x, int y) {
             break;
             
         case 13: //hitting enter
-            menuState = MENU_PLAY;
-            TM.Reset();
             if (menuState != MENU_PLAY) {
                 menuState = MENU_PLAY;
                 TM.Reset();
