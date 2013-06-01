@@ -172,12 +172,16 @@ bool Player::isAlive(){
 }
 
 bool Player:: didCollide(){
+    if (menuState==MENU_ON || menuState==MENU_OVER)
+        return false;
+    
     for (int i = 0; i < blocks.size(); i++) {
         if ((m_posx+10 > blocks[i].x && m_posx-5 < blocks[i].x+5) &&
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
             (m_posz -6 < blocks[i].z && m_posz > blocks[i].z-5)) {
             setDead();
             std::cerr << "dead";
+            menuState = MENU_OVER;
             return true;
         }
     }
@@ -213,9 +217,22 @@ void init() {
 	//data stored in "map" (20x10 array of integers);
 	//0 = no block, 1 = block present, 2 = start position
 
+	std::vector<float> xPos;
+	std::vector<float> yPos;
+	std::vector<float> zPos;
     readFile();
-    storeBlocks();
-    
+    storeBlocks(xPos, yPos, zPos);
+	int numBlocks = xPos.size();
+
+	for (int i = 0; i < numBlocks; i++)
+	{
+		cubePos tempBlock;
+		tempBlock.x = xPos[i];
+		tempBlock.y = yPos[i];
+		tempBlock.z = zPos[i];
+		blocks.push_back(tempBlock);
+	}
+
     ModelView = glGetUniformLocation( program, "ModelView" );
     Projection = glGetUniformLocation( program, "Projection" );
     
@@ -224,6 +241,20 @@ void init() {
     // Set black background
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
    //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
+    
+    TgaImage menuImage;
+    if (!menuImage.loadTGA("menu.tga"))
+    {
+        printf("Error loading image file menu\n");
+        exit(1);
+    }
+    
+    TgaImage gameoverImage;
+    if (!gameoverImage.loadTGA("gameover.tga"))
+    {
+        printf("Error loading image file gameover\n");
+        exit(1);
+    }
 
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
@@ -248,27 +279,44 @@ void displayHandler() {
     
     mat4 p;
     
+    //should go inside else
+    User.draw();
+    
     //draw menu
-    if (menuState==MENU_ON) {
+    if (menuState==MENU_ON || menuState == MENU_OVER) {
+        
+        mat4  mv =Translate(pos_x+2.5, pos_y+15,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+
         //orthographic projection
-        p = Ortho(-1.0, 1.0, -1.0, 1.0, 0.5, 3.0);
+        p = Ortho(2*left, 2*right, 2*bottom, 2*top, zNear, zFar);
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
         
-        glDrawArrays( GL_TRIANGLES, 0, 12 );
+        
+        glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, COLOR_MENU);
+        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
+        
+        glDrawArrays( GL_TRIANGLES, 0, 6 );
     }
     
-    // Draw the Planets and the Sun
+    else {
+        
+        // Draw the Planets and the Sun
 
-    User.draw();
-    drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
-    drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
-    drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
     
-    User.didCollide();
+        User.didCollide();
+    }
+    
     glutSwapBuffers();
 }
 
 void keyHandler(unsigned char key, int x, int y) {
+    
+    if (menuState != MENU_PLAY && key != 'q' && key != 'Q' && key != 13)
+        return;
     
     switch (key) {
             
@@ -306,6 +354,11 @@ void keyHandler(unsigned char key, int x, int y) {
         case 'q':
         case 'Q':
             exit(0);
+            break;
+            
+        case 13: //hitting enter
+            menuState = MENU_PLAY;
+            TM.Reset();
             break;
             
         default:
@@ -353,16 +406,18 @@ void motionHandler(int x, int y) {
     //score
 }
 void idleHandler() {
-    TIME = TM.GetElapsedTime() ;
+    if (menuState==MENU_PLAY) {
+        TIME = TM.GetElapsedTime() ;
     
-    DTIME = TIME - TIME_LAST;
-    TIME_LAST = TIME;
+        DTIME = TIME - TIME_LAST;
+        TIME_LAST = TIME;
     
     
-    User.move(FORWARD);
-    glutPostRedisplay();
+        User.move(FORWARD);
+        glutPostRedisplay();
     
 
+    }
 }
 
 int main(int argc, char** argv)
@@ -395,3 +450,5 @@ int main(int argc, char** argv)
     return 0;         // never reached
 
 }
+
+    
