@@ -541,6 +541,8 @@ void keyHandler(unsigned char key, int x, int y) {
             if (menuState != MENU_PLAY) {
                 menuState = MENU_PLAY;
                 TM.Reset();
+                User.setHeightLevel(HEIGHT_CENTER);
+                User.setAnimationStatus(ANIMATE_NONE);
             }
             break;
             
