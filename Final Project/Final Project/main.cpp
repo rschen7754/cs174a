@@ -342,12 +342,6 @@ void init() {
         exit(1);
     }
     
-    TgaImage gameoverImage;
-    if (!gameoverImage.loadTGA("gameover.tga"))
-    {
-        printf("Error loading image file gameover\n");
-        exit(1);
-    }
 
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );

@@ -11,8 +11,8 @@ varying  vec3 fL;
 
 
 uniform mat4 ModelView;
-//uniform mat4 View;
-//uniform vec4 LightPosition;
+uniform mat4 View;
+uniform vec4 LightPosition;
 uniform mat4 Projection;
 
 // Collin's Code:

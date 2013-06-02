@@ -70,16 +70,28 @@ GLint        uTex, uEnableTex;
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
+typedef Angel::vec3 point3;
+typedef Angel::vec2 point2;
 
 int Index = 0;
 const int NumVertices = 36;
 
 // Arrays to hold ship points
 point4 cube[8];
+point3 cubeNormals[8];
+point3 cubeUV[8];
 point4 shipleft[NumVertices];
+point3 shipleftNormals[NumVertices];
+point2 shipleftUV[NumVertices];
 point4 shipRight[NumVertices];
+point3 shipRightNormals[NumVertices];
+point2 shipRightUV[NumVertices];
 point4 shipCenter[NumVertices];
+point3 shipCenterNormals[NumVertices];
+point2 shipCenterUV[NumVertices];
 point4 blockModel[NumVertices];
+point3 blockModelNormals[NumVertices];
+point2 blockModelUV[NumVertices];
 
 
 struct cubePos {
