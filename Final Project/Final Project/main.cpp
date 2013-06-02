@@ -26,8 +26,26 @@ const int HEIGHT_TOP = 2;
 // quad generates two triangles for each face and assigns colors
 //    to the vertices
 
+//For whatever reason when we use this version of the code the rectangles (say the ship) draw really strangely. Commenting out for now.
+/*
+void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
+{
+    points[Index] = vertices[a]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 1.0f); Index++;
+    points[Index] = vertices[b]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 0.0f); Index++;
+    points[Index] = vertices[c]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 0.0f); Index++;
+    points[Index] = vertices[a]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 1.0f); Index++;
+    points[Index] = vertices[c]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 0.0f); Index++;
+    points[Index] = vertices[d]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 1.0f); Index++;
+    
+}*/
 
-void quad( int a, int b, int c, int d, point4 vertices[], point4 points[])
+void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
 {
     points[Index] = vertices[a]; Index++;
     points[Index] = vertices[b]; Index++;
@@ -38,15 +56,16 @@ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[])
     
 }
 
+
 // Creates a cube given a set of vertices and color
 void colorcube(point4 vertices[], int indexColor, point4 points[])
 {
-    quad( 1, 0, 3, 2 ,vertices, points);
-    quad( 2, 3, 7, 6 ,vertices, points);
-    quad( 3, 0, 4, 7 ,vertices, points);
-    quad( 6, 5, 1, 2 ,vertices, points);
-    quad( 4, 5, 6, 7 ,vertices, points);
-    quad( 5, 4, 0, 1 ,vertices, points);
+    quad( 1, 0, 3, 2, vertices, points, point3( 0.0f,  0.0f,  1.0f) );
+    quad( 2, 3, 7, 6, vertices, points, point3( 1.0f,  0.0f,  0.0f) );
+    quad( 3, 0, 4, 7, vertices, points, point3( 0.0f, -1.0f,  0.0f) );
+    quad( 6, 5, 1, 2, vertices, points, point3( 0.0f,  1.0f,  0.0f) );
+    quad( 4, 5, 6, 7, vertices, points, point3( 0.0f,  0.0f, -1.0f) );
+    quad( 5, 4, 0, 1, vertices, points, point3(-1.0f,  0.0f,  0.0f) );
 }
 
 

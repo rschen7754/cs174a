@@ -79,7 +79,7 @@ const int NumVertices = 36;
 // Arrays to hold ship points
 point4 cube[8];
 point3 cubeNormals[8];
-point3 cubeUV[8];
+point2 cubeUV[8];
 point4 shipleft[NumVertices];
 point3 shipleftNormals[NumVertices];
 point2 shipleftUV[NumVertices];
@@ -155,7 +155,7 @@ Timer TM;
 
 
 //define crosshairs as a series of triangles
-point4 menuBox[12] = {
+point4 menuBox[6] = {
     point4( 10.0, 5.0,  0.0, 1.0 ),
     point4( -10.0,  5.0, 0.0, 1.0 ),
     point4( -10.0, -5.0, 0.0, 1.0 ),
