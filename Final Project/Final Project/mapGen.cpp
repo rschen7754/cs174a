@@ -3,16 +3,9 @@
 #include "fstream"
 #include <string>
 #include <vector>
-//#include "main.h"
 using namespace std;
 
 
-const int MAXROWS = 20;
-const int MAXCOLS = 20;
-char mapInput[MAXROWS][MAXCOLS];
-int map[MAXROWS][MAXCOLS-10];
-//new
-std::vector<std::vector <char>> mapInputVec;
 std::vector<char> mapInputVec2;
 std::vector<std::vector <int>> mapVec;
 
@@ -144,15 +137,15 @@ void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 		itr1 = 0;
 		itr2++;
 	}
-	//Test code
-	vector<float>::iterator counter = xPos.begin();
-	vector<float>::iterator counter2 = yPos.begin();
-	vector<float>::iterator counter3 = zPos.begin();
-	for (counter = xPos.begin(); counter != xPos.end(); counter++)
-	{
-		cout<< *counter << ' '<< *counter2 << ' ' << *counter3 << endl;
-		counter2++;
-		counter3++;
-	}
+	////Test code
+	//vector<float>::iterator counter = xPos.begin();
+	//vector<float>::iterator counter2 = yPos.begin();
+	//vector<float>::iterator counter3 = zPos.begin();
+	//for (counter = xPos.begin(); counter != xPos.end(); counter++)
+	//{
+	//	cout<< *counter << ' '<< *counter2 << ' ' << *counter3 << endl;
+	//	counter2++;
+	//	counter3++;
+	//}
 	return;
 }
