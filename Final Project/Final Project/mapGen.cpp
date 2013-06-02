@@ -89,11 +89,20 @@ void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 	int itr1=0;
 	int itr2=0;
 	int xshift = 0;
-	for (col = mapVec.begin()->begin(); col != mapVec.begin()->end(); col++)
+	int mapWidth = 0;
+	for (row = mapVec.begin(); row != mapVec.end(); row++)
 	{
-		xshift++;
+		int tempCounter = 0;
+		for (col = row->begin(); col != row->end(); col++)
+		{
+			tempCounter++;
+		}
+		if (tempCounter > mapWidth)
+			mapWidth = tempCounter;
 	}
+	xshift = mapWidth;
 	xshift = (xshift*25)/2; //to center player
+
 	for (row = mapVec.begin(); row != mapVec.end(); row++)
 	{
 		//create wall on right side
@@ -124,28 +133,28 @@ void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 			itr1++;
 		}
 		//create wall on left side
-		xPos.push_back((float)(itr1*25-xshift)); //left and right
+		xPos.push_back((float)(mapWidth*25-xshift)); //left and right
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(-15); // vertical position
-		xPos.push_back((float)(itr1*25-xshift)); //left and right
+		xPos.push_back((float)(mapWidth*25-xshift)); //left and right
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(0);
-		xPos.push_back((float)(itr1*25-xshift)); //left and right
+		xPos.push_back((float)(mapWidth*25-xshift)); //left and right
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(15);
 
 		itr1 = 0;
 		itr2++;
 	}
-	////Test code
-	//vector<float>::iterator counter = xPos.begin();
-	//vector<float>::iterator counter2 = yPos.begin();
-	//vector<float>::iterator counter3 = zPos.begin();
-	//for (counter = xPos.begin(); counter != xPos.end(); counter++)
-	//{
-	//	cout<< *counter << ' '<< *counter2 << ' ' << *counter3 << endl;
-	//	counter2++;
-	//	counter3++;
-	//}
+	//Test code
+	vector<float>::iterator counter = xPos.begin();
+	vector<float>::iterator counter2 = yPos.begin();
+	vector<float>::iterator counter3 = zPos.begin();
+	for (counter = xPos.begin(); counter != xPos.end(); counter++)
+	{
+		cout<< *counter << ' '<< *counter2 << ' ' << *counter3 << endl;
+		counter2++;
+		counter3++;
+	}
 	return;
 }
