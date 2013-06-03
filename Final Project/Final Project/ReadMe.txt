@@ -16,12 +16,10 @@ topic.
 	-vertical movement is limited to one unit up and one unit down from 
 	the center.  Users are only able to specify location of blocks on a 2D plane,
 	so we limited random generation of the vertical coordinates of the blocks
-	to ensure that the game would not be too easy (blocks would not be spaced out
+	to ensure that the game would not be too easy (so blocks would not be spaced out
 	too far apart)  
 4) Score and menu are implemented 
-5) Health was not implemented due to the relatively slow pace of the game.  
-	-It was determined that it would make the game too easy, so it was decided
-	that any collision would result in the user having to restart
+5) Lives and display of lives are implemented
 6) Power ups and other obstacles were not implemented.
 	
 -----To generate a custom map -----
@@ -31,11 +29,13 @@ The following are the letters accepted to create a map:
 An 'o' represents where the user starts.
 A 'b' represents empty space (no block present).
 An 'x' is where a user wants to place the block.  
+A 'w' creates a column of blocks at the designated coordinates
 
 -Each new row must be started with a letter ('b', 'o', or 'x')
 -each letter is delineated by a tab ('\t')
 -To generate the next row of blocks, press "enter" to insert a new row
--The cube's vertical position is randomly generated in the map 
+-The cube's vertical position is randomly generated in the map,
+unless user chooses to use the column functionality. 
 
 -----Keyboard movement-----
 Press 'Enter' key: start/restart a game

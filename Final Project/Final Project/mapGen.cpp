@@ -58,17 +58,21 @@ bool readFile()
 	while(counter < sizeInput)
 	{
 		tempChar = *it; 
-		if (tempChar == 'o')
+		if (tempChar == 'o') //Position of player (unused, player initialized at (0,0)) 
 		{
 			tempVec.push_back(2);
 		}
-		else if (tempChar == 'b')
+		else if (tempChar == 'b') //blank, no blocks
 		{
 			tempVec.push_back(0);
 		}
-		else if (tempChar == 'x')
+		else if (tempChar == 'x') //block present
 		{
 			tempVec.push_back(1);
+		}
+		else if (tempChar == 'w') //allows users to create "walls" (column of blocks)
+		{
+			tempVec.push_back(3);
 		}
 		else if (tempChar == '\n' && counter+1 < sizeInput)
 		{
@@ -86,8 +90,6 @@ int storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 
 	vector< vector<int> >::iterator row;
 	vector<int>::iterator col;
-	int itr1=0;
-	int itr2=0;
 	int xshift = 0;
 	int mapWidth = 0;
 	for (row = mapVec.begin(); row != mapVec.end(); row++)
@@ -100,22 +102,26 @@ int storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 		if (tempCounter > mapWidth)
 			mapWidth = tempCounter;
 	}
+	mapWidth+=2; //account for adding walls on both sides
 	xshift = mapWidth;
-	xshift = (xshift*25)/2; //to center player
+	xshift = (xshift*25)/2; //shift amount to center player
 
+	int itr1=0;
+	int itr2=0;
 	int lastRow = 0;
 	for (row = mapVec.begin(); row != mapVec.end(); row++)
 	{
 		//create wall on right side
-		xPos.push_back((float)(itr1*25-xshift)); //left and right
+		xPos.push_back((float)((itr1)*25-xshift)); //left and right
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(-15); // vertical position
-		xPos.push_back((float)(itr1*25-xshift)); //left and right
+		xPos.push_back((float)((itr1)*25-xshift)); //left and right
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(0);
-		xPos.push_back((float)(itr1*25-xshift)); //left and right
+		xPos.push_back((float)((itr1)*25-xshift)); //left and right
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(15);
+		itr1++;
 		for (col = row->begin(); col != row->end(); col++)
 		{
 			//if (map[i][j] == 1)
@@ -131,31 +137,43 @@ int storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 				else
 					yPos.push_back(15);
 			}
+			else if (*col == 3) //"column" of cubes; implement "wall" functionality
+			{
+				xPos.push_back((float)(itr1*25-xshift)); //left and right
+				zPos.push_back((float)(itr2*50+300)); //into the screen
+				yPos.push_back(-15);
+				xPos.push_back((float)(itr1*25-xshift)); //left and right
+				zPos.push_back((float)(itr2*50+300)); //into the screen
+				yPos.push_back(0);
+				xPos.push_back((float)(itr1*25-xshift)); //left and right
+				zPos.push_back((float)(itr2*50+300)); //into the screen
+				yPos.push_back(15);
+			}
 			itr1++;
 		}
 		//create wall on left side
-		xPos.push_back((float)(mapWidth*25-xshift)); //left and right
+		xPos.push_back((float)((mapWidth-1)*25-xshift)); //left and right
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(-15); // vertical position
-		xPos.push_back((float)(mapWidth*25-xshift)); //left and right
+		xPos.push_back((float)((mapWidth-1)*25-xshift)); //left and right
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(0);
-		xPos.push_back((float)(mapWidth*25-xshift)); //left and right
+		xPos.push_back((float)((mapWidth-1)*25-xshift)); //left and right
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(15);
-
-		itr1 = 0;
-		lastRow = itr2*50+300;
-		itr2++;
+		itr1 = 0; //reset x-position
+		lastRow = itr2*50+300; //stores position of furthest cube (z-depth)
+		itr2++; //iterate by one row of cubes (z-depth)
 	}
-	//Test code
-	vector<float>::iterator counter = xPos.begin();
-	vector<float>::iterator counter2 = yPos.begin();
-	vector<float>::iterator counter3 = zPos.begin();
-	for (counter = xPos.begin(); counter != xPos.end(); counter++)
-	{
-		counter2++;
-		counter3++;
-	}
+	////Test code
+	//vector<float>::iterator counter = xPos.begin();
+	//vector<float>::iterator counter2 = yPos.begin();
+	//vector<float>::iterator counter3 = zPos.begin();
+	//for (counter = xPos.begin(); counter != xPos.end(); counter++)
+	//{
+	//	cout<< *counter << ' '<< *counter2 << ' ' << *counter3 << endl;
+	//	counter2++;
+	//	counter3++;
+	//}
 	return lastRow;
 }
