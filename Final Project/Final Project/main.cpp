@@ -17,24 +17,36 @@
 //    to the vertices
 
 //For whatever reason when we use this version of the code the rectangles (say the ship) draw really strangely. Commenting out for now.
-/*
+
 void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
 {
-    points[Index] = vertices[a]; cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(0.0f, 1.0f); Index++;
-    points[Index] = vertices[b]; cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(0.0f, 0.0f); Index++;
-    points[Index] = vertices[c]; cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(1.0f, 0.0f); Index++;
-    points[Index] = vertices[a]; cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(0.0f, 1.0f); Index++;
-    points[Index] = vertices[c]; cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(1.0f, 0.0f); Index++;
-    points[Index] = vertices[d]; cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(1.0f, 1.0f); Index++;
+    points[Index] = vertices[a];
+   // cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 1.0f);
+    Index++;
+    points[Index] = vertices[b];
+    //cubeNormals[Index] = normal;
+    //cubeUV[Index] = point2(0.0f, 0.0f);
+    Index++;
+    points[Index] = vertices[c];
+    //cubeNormals[Index] = normal;
+    //cubeUV[Index] = point2(1.0f, 0.0f);
+    Index++;
+    points[Index] = vertices[a];
+    //cubeNormals[Index] = normal;
+    //cubeUV[Index] = point2(0.0f, 1.0f);
+    Index++;
+    points[Index] = vertices[c];
+    //cubeNormals[Index] = normal;
+    //cubeUV[Index] = point2(1.0f, 0.0f);
+    Index++;
+    points[Index] = vertices[d];
+    //cubeNormals[Index] = normal;
+    //cubeUV[Index] = point2(1.0f, 1.0f);
+    Index++;
  
-}*/
-
+}
+/*
 void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
 {
     points[Index] = vertices[a]; Index++;
@@ -45,7 +57,7 @@ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const
     points[Index] = vertices[d]; Index++;
     
 }
- 
+ */
 
 
 // Creates a cube given a set of vertices and color
@@ -511,7 +523,7 @@ void displayHandler() {
  
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
         
-     //   glutPrint(-5.5,20, "Welcome to SpaceRunner!", 1, 1, 1, 1);
+        glutPrint(-5.5,20,User.getZ(), "Welcome to SpaceRunner!", 1, 1, 1, 1);
         
         mv =Translate(pos_x+2.5, pos_y+15,pos_z);
     //    glutPrint(-4.5,17, "Press Enter to begin.", 1, 1, 1, 1);
