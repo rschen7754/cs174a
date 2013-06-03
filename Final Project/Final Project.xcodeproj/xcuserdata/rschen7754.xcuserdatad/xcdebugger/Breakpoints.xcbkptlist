@@ -12,9 +12,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "277"
-         endingLineNumber = "277"
-         landmarkName = "Player::setAnimationStatus(int status)"
-         landmarkType = "5">
+         endingLineNumber = "277">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -26,7 +24,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "230"
          endingLineNumber = "230"
-         landmarkName = "Player::move(int dir)"
+         landmarkName = "Player::Player(int x, int y)"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

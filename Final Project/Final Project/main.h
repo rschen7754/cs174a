@@ -70,7 +70,7 @@ const int RIGHT = 3;
 const int FORWARD = 4;
 
 float SCORE = 0;
-int health = 100;
+int health = 3;
 
 int Width = 800;
 int Height = 800 ;
@@ -93,21 +93,19 @@ const int NumVertices = 36;
 // Arrays to hold ship points
 
 point4 cube[NumVertices];
-point3 cubeNormals[NumVertices];
-point2 cubeUV[NumVertices];
 
 
 point4 shipleft[NumVertices];
-point3 shipleftNormals[NumVertices];
+vec3 shipleftNormals[NumVertices];
 point2 shipleftUV[NumVertices];
 point4 shipRight[NumVertices];
-point3 shipRightNormals[NumVertices];
+vec3 shipRightNormals[NumVertices];
 point2 shipRightUV[NumVertices];
 point4 shipCenter[NumVertices];
-point3 shipCenterNormals[NumVertices];
+vec3 shipCenterNormals[NumVertices];
 point2 shipCenterUV[NumVertices];
 point4 blockModel[NumVertices];
-point3 blockModelNormals[NumVertices];
+vec3 blockModelNormals[NumVertices];
 point2 blockModelUV[NumVertices];
 
 
@@ -124,14 +122,15 @@ std::vector<cubePos> blocks;
 void createCube(point4 cube[], int x, int y, int z, int width, int height, int length);
 
 // Initializes a rectangle to an array
-void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height,GLfloat length,  point4 points[]);
+void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height,GLfloat length,  point4 points[], vec3 normals[]);
 
 // Draws the rectangle
-void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z);
+void drawRectangle(point4 points[], vec3 normals[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z);
 
 GLuint program;
 GLuint vao[2];
 GLuint vPosition;
+GLuint vNormal;
 GLuint buffer;
 
 // Model-view and projection matrices uniform location
