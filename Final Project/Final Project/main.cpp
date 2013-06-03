@@ -21,43 +21,31 @@
 void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
 {
     points[Index] = vertices[a];
-   // cubeNormals[Index] = normal;
+    cubeNormals[Index] = normal;
     cubeUV[Index] = point2(0.0f, 1.0f);
     Index++;
     points[Index] = vertices[b];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(0.0f, 0.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 0.0f);
     Index++;
     points[Index] = vertices[c];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(1.0f, 0.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 0.0f);
     Index++;
     points[Index] = vertices[a];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(0.0f, 1.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 1.0f);
     Index++;
     points[Index] = vertices[c];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(1.0f, 0.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 0.0f);
     Index++;
     points[Index] = vertices[d];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(1.0f, 1.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 1.0f);
     Index++;
  
 }
-/*
-void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
-{
-    points[Index] = vertices[a]; Index++;
-    points[Index] = vertices[b]; Index++;
-    points[Index] = vertices[c]; Index++;
-    points[Index] = vertices[a]; Index++;
-    points[Index] = vertices[c]; Index++;
-    points[Index] = vertices[d]; Index++;
-    
-}
- */
 
 
 // Creates a cube given a set of vertices and color
