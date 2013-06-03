@@ -38,26 +38,27 @@ void main()
     //    gl_TexCoord[0].xy = vTexCoords;
 
 
-//    fN = (ModelView*Transformation*vec4(vNormal,0)).xyz;
-//    fE =-(ModelView*Transformation*vPosition).xyz;
-//    fL = (ModelView*(LightPosition-Transformation*vPosition)).xyz;
-//
-//    vec3 N,V,L,H;
-//    N = normalize(fN);
-//    V = normalize(fE);
-//    L = normalize(fL);
-//    H = normalize(L + V);
-//
-//    vec4 ambient = 0.2*fcolor;
-//    vec4 diffuse = max(dot(L,N),0.0)*0.5*fcolor;
-//    vec4 specular = pow(max(dot(N,H),0.0),20.0)*0.5*vec4(1.0,1.0,1.0,1.0);
-//    if(dot(L,N) < 0.0){
-//    specular = vec4(0.0,0.0,0.0,1.0);
-//    }
+    fN = (ModelView*Transformation*vec4(vNormal,0)).xyz;
+    fE =-(ModelView*Transformation*vPosition).xyz;
+    fL = (ModelView*(LightPosition-Transformation*vPosition)).xyz;
 
-   // color = ambient + diffuse + specular;
+    vec3 N,V,L,H;
+    N = normalize(fN);
+    V = normalize(fE);
+    L = normalize(fL);
+    H = normalize(L + V);
+
+    vec4 ambient = 0.2*fcolor;
+    vec4 diffuse = max(dot(L,N),0.0)*0.5*fcolor;
+    vec4 specular = pow(max(dot(N,H),0.0),20.0)*0.5*vec4(1.0,1.0,1.0,1.0);
+    if(dot(L,N) < 0.0){
+    specular = vec4(0.0,0.0,0.0,1.0);
+    }
+
+    color = ambient + diffuse + specular;
 
     // Collin's Code:
-    gl_Position =  Projection*ModelView*vPosition;;
-    color = fcolor;
+    gl_Position =  Projection*ModelView*Transformation*vPosition;;
+
+    //color = fcolor;
 }

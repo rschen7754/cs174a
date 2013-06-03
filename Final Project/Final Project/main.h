@@ -127,7 +127,7 @@ void createCube(point4 cube[], int x, int y, int z, int width, int height, int l
 void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height,GLfloat length,  point4 points[], vec3 normals[]);
 
 // Draws the rectangle
-void drawRectangle(point4 points[], vec3 normals[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z);
+void drawRectangle(point4 points[], vec3 normals[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z, int texture);
 
 GLuint program;
 GLuint vao[2];

@@ -97,58 +97,7 @@ void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat 
     colorcube(cube, 0, points, normals);
 }
 
-// Draws a rectangle
-void drawRectangle(point4 points[], vec3 normals[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z, int texture)
-{
-    
-//    // Create and initialize a buffer object
-//    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices + sizeof(vec3)*NumVertices, NULL, GL_STATIC_DRAW );
-//    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*NumVertices, points );
-//    glBufferSubData(GL_ARRAY_BUFFER, sizeof(point4)*NumVertices, sizeof(vec3)*NumVertices, normals);
 
-    
-    // Create and initialize a buffer object
-    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices , NULL, GL_STATIC_DRAW );
-    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*NumVertices, points );
-    
-    
-
-    // set up vertex arrays
-    glEnableVertexAttribArray( vPosition );
-    glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
-    //glEnableVertexAttribArray( vNormal );
-    //glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(point4)*NumVertices) );
-    
-    // Collin's Light Code ========================================================
-    
-    point4 light_position( 0.0, 0.0, -20.0, 1.0 );
-    glUniform4fv( glGetUniformLocation(program, "LightPosition"), 1, light_position );
-
-    
-    // Collin's Light Code ========================================================
-    
-    // Create model_view matrix to transform and rotate the cubes
-    mat4 transform = Translate(x, y, z);
-    glUniformMatrix4fv(glGetUniformLocation(program, "Transformation"), 1,GL_TRUE,transform);
-    
-    mat4  mv =Translate(pos_x, pos_y,pos_z)*Translate(x, y, z);
-    glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-    
-    // Define a viewing box
-    mat4 p = Perspective(45, aspect, zNear, zFar);
-    glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
-    glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, fColor);
-    
-//    if (texture==1) {
-//        glBindTexture( GL_TEXTURE_2D, texture_cube );
-//        glUniform1i( uEnableTex, 1 );
-//    }
-    // Draw proper items
-    glDrawArrays( GL_TRIANGLES, 0, NumVertices );
-    
-    glUniform1i( uEnableTex, 0 );
-    
-}
 
 //======================================
 
@@ -246,11 +195,23 @@ void Player::reinitializePlayer()
     m_oldx = m_posx;
 
 }
-
+    GLfloat acceleration = 1;
 void Player::move(int dir)
 {
     GLfloat speed = 1.7;
-    GLfloat movement = DTIME*250*speed;
+
+    GLfloat movement = DTIME*250*speed*acceleration;
+//    if (TIME > 15) {
+//        acceleration = 1.25;
+//    }else if (TIME > 25)
+//    {
+//        acceleration = 1.5;
+//    }else if (TIME > 60)
+//    {
+//        acceleration = 1.75;
+//        std::cerr << "fast";
+//    }
+    
     if (dir == UP) {
         m_posy += movement;
         pos_y -= movement;
@@ -403,9 +364,58 @@ void Player::draw(){
     drawRectangle(shipRight, shipRightNormals, COLOR_BLUE, m_posx, m_posy, m_posz, 0);    
 }
 
-
 // Initialize Player
 Player User(0,0);
+
+// Draws a rectangle
+void drawRectangle(point4 points[], vec3 normals[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z, int texture)
+{
+    
+    glUseProgram(program);
+    
+    // Create and initialize a buffer object
+    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices + sizeof(vec3)*NumVertices, NULL, GL_STATIC_DRAW );
+    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*NumVertices, points );
+    glBufferSubData(GL_ARRAY_BUFFER, sizeof(point4)*NumVertices, sizeof(vec3)*NumVertices, normals);
+    
+    glEnableVertexAttribArray(vPosition);
+    glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+    glEnableVertexAttribArray( vNormal );
+    glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(point4)*NumVertices) );
+    
+    // Collin's Light Code ========================================================
+    
+    point4 light_position( User.getX(), User.getY()+10, User.getZ() -100, 1.0 );
+    glUniform4fv( glGetUniformLocation(program, "LightPosition"), 1, light_position );
+    
+    
+    // Collin's Light Code ========================================================
+    
+    // Create model_view matrix to transform and rotate the cubes
+    mat4 transform = Translate(x, y, z);
+    glUniformMatrix4fv(glGetUniformLocation(program, "Transformation"), 1,GL_TRUE,transform);
+    
+    mat4  mv =Translate(pos_x, pos_y,pos_z);
+    glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+    
+    // Define a viewing box
+    mat4 p = Perspective(45, aspect, zNear, zFar);
+    glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
+    glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, fColor);
+    
+    //    if (texture==1) {
+    //        glBindTexture( GL_TEXTURE_2D, texture_cube );
+    //        glUniform1i( uEnableTex, 1 );
+    //    }
+    // Draw proper items
+    glDrawArrays( GL_TRIANGLES, 0, NumVertices );
+    
+    glUniform1i( uEnableTex, 0 );
+    
+}
+
+
+
 
 
 void init() {
@@ -448,14 +458,15 @@ void init() {
         
 	}
     
+    vPosition = glGetAttribLocation(program, "vPosition");
+    vNormal = glGetAttribLocation(program, "vNormal");
+    
     ModelView = glGetUniformLocation( program, "ModelView" );
     Projection = glGetUniformLocation( program, "Projection" );
     
     // Place test blocks into blocks vector for collision detection
     
-    // Set black background
-    glClearColor( 0.0, 0.0, 0.0, 1.0 );
-    //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
+
     
     TgaImage cubeImage;
     if (!cubeImage.loadTGA("cube_Texture2.tga"))
@@ -500,6 +511,10 @@ void init() {
     
     
     glEnable(GL_DEPTH_TEST);
+    
+    // Set black background
+    glClearColor( 0.0, 0.0, 0.0, 1.0 );
+    //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
 }
 
 void set_colour(float r, float g, float b)
@@ -676,6 +691,8 @@ void keyHandler(unsigned char key, int x, int y) {
                 menuState = MENU_PLAY;
                 TM.Reset();
                 User.reinitializePlayer();
+                TIME = 0;
+                acceleration = 1;
             }
             break;
             

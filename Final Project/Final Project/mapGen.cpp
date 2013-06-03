@@ -154,11 +154,8 @@ int storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 	vector<float>::iterator counter3 = zPos.begin();
 	for (counter = xPos.begin(); counter != xPos.end(); counter++)
 	{
-		cout<< *counter << ' '<< *counter2 << ' ' << *counter3 << endl;
 		counter2++;
 		counter3++;
 	}
-	cout <<endl;
-	cout << lastRow << endl;
 	return lastRow;
 }
