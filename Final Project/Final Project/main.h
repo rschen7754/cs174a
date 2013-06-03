@@ -184,6 +184,6 @@ point4 menuBox[6] = {
 };
 
 GLuint texture_cube;
-
+int end;
 
 #endif

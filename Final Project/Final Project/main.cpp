@@ -215,10 +215,10 @@ Player::Player(int x, int y)
 
 void Player::reinitializePlayer()
 {
-    m_posx = 0;
-    m_posy = 0;
-    m_posz = 0;
-    
+ //   m_posx = 0;
+ //   m_posy = 0;
+ //   m_posz = 0;
+    health=100;
     m_isAlive = true;
     m_heightLevel = HEIGHT_CENTER;
     m_animationStatus = ANIMATE_NONE;
@@ -318,7 +318,7 @@ bool Player:: didCollide(){
         if ((m_posx+10 > blocks[i].x && m_posx-5 < blocks[i].x+5) &&
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
             (m_posz -30< blocks[i].z && m_posz > blocks[i].z+5)) {
-			health--;
+			health-=2;
             if (health <= 0)
 			{
 				setDead();
@@ -328,6 +328,12 @@ bool Player:: didCollide(){
         }
         
         
+    }
+   // std::cerr<<end << " " << m_posz;
+    if ((m_posz*-1) >= end) {
+        
+        setDead();
+        menuState = MENU_OVER;
     }
     
     return false;
@@ -371,7 +377,7 @@ void init() {
 	std::vector<float> yPos;
 	std::vector<float> zPos;
     readFile();
-    storeBlocks(xPos, yPos, zPos);
+    end = storeBlocks(xPos, yPos, zPos);
 	int numBlocks = xPos.size();
     
 	for (int i = 0; i < numBlocks; i++)
@@ -567,7 +573,7 @@ void displayHandler() {
     if (!User.isAlive()) {
          glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
          glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
-		 glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
+		 glutPrint(-25, 35, -50,"Health: 0", 1.0, 1.0, 1.0, 1.0);
         
     }else{
         glutPrint(-25, 45, -50,ss.str(), 1.0, 1.0, 1.0, 1.0);
