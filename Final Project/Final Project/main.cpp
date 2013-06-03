@@ -188,7 +188,7 @@ void Player::reinitializePlayer()
  //   m_posx = 0;
  //   m_posy = 0;
  //   m_posz = 0;
-    health=7;
+    health=10;
     m_isAlive = true;
     m_heightLevel = HEIGHT_CENTER;
     m_animationStatus = ANIMATE_NONE;
@@ -635,13 +635,14 @@ void displayHandler() {
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
         
         
-        mat4 mv =Translate(pos_x, pos_y,pos_z);
+        mat4 mv =Translate(pos_x-3, pos_y+25,pos_z);
         
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
         
         glutPrint(-5.5,30,User.getZ(), "Welcome to SpaceRunner!", 1, 1, 1, 1);
         
-        mv =Translate(pos_x+2.5, pos_y+15,pos_z);
+        mv =Translate(pos_x-2, pos_y+20,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
         glutPrint(-4.5,17,User.getZ(), "Press Enter to begin.", 1, 1, 1, 1);
         
     }
@@ -653,13 +654,31 @@ void displayHandler() {
     }
     
         if ((User.getZ()*-1) >= end) {
+                mat4 mv=ModelView*Translate(pos_x+0.1, pos_y+10,pos_z);
+                glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
                 glutPrint(-1.8 , 35,-50, "You won!", 1.0, 1.0, 1.0, 1.0);
+            
+                mv=ModelView*Translate(pos_x-5, pos_y,pos_z);
+                glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+
                 glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
+            
+            
+                mv=ModelView*Translate(pos_x+5, pos_y,pos_z);
+                glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
                 glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
             }
         else if (!User.isAlive()) {
-         glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
-         glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
+            mat4 mv=ModelView*Translate(pos_x, pos_y+10,pos_z);
+            glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+            glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
+            
+            mv=ModelView*Translate(pos_x-5, pos_y,pos_z);
+            glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+            glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
+            
+            mv=ModelView*Translate(pos_x+5, pos_y,pos_z);
+            glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
 		 glutPrint(-25, 35, -50,"Lives: 0", 1.0, 1.0, 1.0, 1.0);
         
     }else{
