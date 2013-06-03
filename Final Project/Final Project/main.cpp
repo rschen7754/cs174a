@@ -7,6 +7,8 @@
 //
 
 #include "main.h"
+#include <sstream>
+#include <string>
 
 
 
@@ -21,42 +23,42 @@
 void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
 {
     points[Index] = vertices[a];
-   // cubeNormals[Index] = normal;
+    cubeNormals[Index] = normal;
     cubeUV[Index] = point2(0.0f, 1.0f);
     Index++;
     points[Index] = vertices[b];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(0.0f, 0.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 0.0f);
     Index++;
     points[Index] = vertices[c];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(1.0f, 0.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 0.0f);
     Index++;
     points[Index] = vertices[a];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(0.0f, 1.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 1.0f);
     Index++;
     points[Index] = vertices[c];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(1.0f, 0.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 0.0f);
     Index++;
     points[Index] = vertices[d];
-    //cubeNormals[Index] = normal;
-    //cubeUV[Index] = point2(1.0f, 1.0f);
+    cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 1.0f);
     Index++;
- 
-}
-/*
-void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
-{
-    points[Index] = vertices[a]; Index++;
-    points[Index] = vertices[b]; Index++;
-    points[Index] = vertices[c]; Index++;
-    points[Index] = vertices[a]; Index++;
-    points[Index] = vertices[c]; Index++;
-    points[Index] = vertices[d]; Index++;
     
 }
+/*
+ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
+ {
+ points[Index] = vertices[a]; Index++;
+ points[Index] = vertices[b]; Index++;
+ points[Index] = vertices[c]; Index++;
+ points[Index] = vertices[a]; Index++;
+ points[Index] = vertices[c]; Index++;
+ points[Index] = vertices[d]; Index++;
+ 
+ }
  */
 
 
@@ -132,6 +134,9 @@ class Player {
 public:
     Player(int x, int y);
     
+    // Reinitializes the Player
+    void reinitializePlayer();
+    
     // Moves in a specific direction
     void move(int dir);
     
@@ -194,8 +199,6 @@ Player::Player(int x, int y)
     m_posy = 0;
     m_posz = 0;
     
-    pos_x = -x-2.0;
-    pos_y = -y-15.0;
     m_isAlive = true;
     m_heightLevel = HEIGHT_CENTER;
     m_animationStatus = ANIMATE_NONE;
@@ -208,10 +211,23 @@ Player::Player(int x, int y)
     
 }
 
+void Player::reinitializePlayer()
+{
+    m_posx = 0;
+    m_posy = 0;
+    m_posz = 0;
+    
+    m_isAlive = true;
+    m_heightLevel = HEIGHT_CENTER;
+    m_animationStatus = ANIMATE_NONE;
+    m_oldx = m_posx;
+
+}
+
 void Player::move(int dir)
 {
     GLfloat speed = 1.7;
-    GLfloat movement = DTIME*100*speed;
+    GLfloat movement = DTIME*200*speed;
     if (dir == UP) {
         m_posy += movement;
         pos_y -= movement;
@@ -277,7 +293,6 @@ GLfloat Player::getX(){
 
 void Player::setDead(){
     m_isAlive = false;
-    glutPostRedisplay();
 }
 
 bool Player::isAlive(){
@@ -307,7 +322,6 @@ bool Player:: didCollide(){
         }
         
         
-        
     }
     
     return false;
@@ -319,6 +333,7 @@ void Player::draw(){
     drawRectangle(shipleft, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
     drawRectangle(shipCenter, COLOR_GREY, m_posx, m_posy, m_posz, 0);
     drawRectangle(shipRight, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
+    std::cerr << pos_x << "\n";
     
 }
 
@@ -424,19 +439,17 @@ void set_colour(float r, float g, float b)
     glUniform4f(uSpecular, specular*r, specular*g, specular*b, 1.0f);
 }
 
-
-void glutPrint(float x, float y, float z, char* text, float r, float g, float b, float a)
+void glutPrint(float x, float y, float z, std::string text, float r, float g, float b, float a)
 {
-    if(!text || !strlen(text)) return;
     bool blending = false;
     if(glIsEnabled(GL_BLEND)) blending = true;
     glEnable(GL_BLEND);
     glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, color4(r,g,b,a));
     //glRasterPos2f(x,y);
     glRasterPos3f(x, y, z);
-    while (*text) {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text);
-        text++;
+
+    for (int i = 0; i < text.size(); i++) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text[i]);
     }
     if(!blending) glDisable(GL_BLEND);
 }
@@ -446,13 +459,12 @@ void displayHandler() {
     
     mat4 p;
     
+    // Draw the map
     for (int i = 0; i < blocks.size(); i++) {
         drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), blocks[i].x, blocks[i].y, blocks[i].z, 1);
     }
-
-
-
     
+    // Handles the animation for the ship
     if (User.getAnimationStatus() == ANIMATE_UP) {
         if (User.getHeightLevel() == HEIGHT_BOTTOM) {
             if (User.getY() <=0) {
@@ -471,7 +483,7 @@ void displayHandler() {
             }
             
         }
-
+        
     }else if (User.getAnimationStatus() == ANIMATE_DOWN)
     {
         
@@ -492,7 +504,7 @@ void displayHandler() {
             }
         }
         else
-             User.setAnimationStatus(ANIMATE_NONE);
+            User.setAnimationStatus(ANIMATE_NONE);
     }else if (User.getAnimationStatus() == ANIMATE_LEFT){
         if (static_cast<int>(User.getX())  >= static_cast<int>(User.getOldX()) -24) {
             User.move(LEFT);
@@ -508,43 +520,50 @@ void displayHandler() {
         }
     }
     
+    // Draw the ship
     User.draw();
+    
+    // Determine the score
+    // Display the Score
+    std::stringstream ss;
+    ss <<"Score: " << SCORE;
     
     //draw menu
     if (menuState==MENU_ON || menuState == MENU_OVER) {
-
+        
         
         //orthographic projection
         p = Ortho(2*left, 2*right, 2*bottom, 2*top, zNear, zFar);
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
         
-
+        
         mat4 mv =Translate(pos_x+2.5, pos_y,pos_z);
- 
+        
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
         
         glutPrint(-5.5,20,User.getZ(), "Welcome to SpaceRunner!", 1, 1, 1, 1);
         
         mv =Translate(pos_x+2.5, pos_y+15,pos_z);
-    //    glutPrint(-4.5,17, "Press Enter to begin.", 1, 1, 1, 1);
+        glutPrint(-4.5,17,User.getZ(), "Press Enter to begin.", 1, 1, 1, 1);
         
     }
     
     else {
         //should go inside else
-
-        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100, 0);
-        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200, 0);
-        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), -10, 10, -200, 0);
-        
-        
         
         User.didCollide();
     }
+    
+    if (!User.isAlive()) {
+         glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
+         glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
+        
+    }else{
+        glutPrint(-25, 45, -50,ss.str(), 1.0, 1.0, 1.0, 1.0);
+    }
+    
 
-        if (!User.isAlive()) {
-            glutPrint(User.getX(), User.getY(),User.getZ(), "Hello", 1.0, 1.0, 1.0, 1.0);
-        }
+
     
     glutSwapBuffers();
 }
@@ -555,37 +574,7 @@ void keyHandler(unsigned char key, int x, int y) {
         return;
     
     switch (key) {
-            
-        case 'w':       // Move the camera forward
-            pos_x -= 2;
-            pos_z += 2;
-            zFar -= 2;
-            break;
-        case 's':       // Move the camera backward
-            pos_x += 2;
-            pos_z -= 2;
-            zFar += 2;
-            break;
-        case 'd':       // Move the camera to the right
-            pos_x -= 2;
-            pos_z -= 2;
-            break;
-        case 'a':       // Move the camera to the left
-            pos_x += 2;
-            pos_z += 2;
-            break;
-        case 'i': // Moves the camera up
-            pos_y -= 1;
-            break;
-        case 'm': // Moves the camera down
-            pos_y += 1;
-            break;
-        case ' ':// Resets the view of the camera
-            // Coordinates of the camera
-            pos_x = 0.0;
-            pos_y = -110.0;
-            pos_z = -250.0;
-            break;
+        
             
         case 'q':
         case 'Q':
@@ -596,7 +585,7 @@ void keyHandler(unsigned char key, int x, int y) {
             if (menuState != MENU_PLAY) {
                 menuState = MENU_PLAY;
                 TM.Reset();
-                User.setAnimationStatus(ANIMATE_NONE);
+                User.reinitializePlayer();
             }
             break;
             

@@ -91,8 +91,10 @@ const int NumVertices = 36;
 
 // Arrays to hold ship points
 point4 cube[8];
-point3 cubeNormals[8];
-point2 cubeUV[8];
+point3 cubeNormals[NumVertices];
+point2 cubeUV[NumVertices];
+
+
 point4 shipleft[NumVertices];
 point3 shipleftNormals[NumVertices];
 point2 shipleftUV[NumVertices];
