@@ -239,7 +239,7 @@ void Player::reinitializePlayer()
  //   m_posx = 0;
  //   m_posy = 0;
  //   m_posz = 0;
-    health=100;
+    health=5;
     m_isAlive = true;
     m_heightLevel = HEIGHT_CENTER;
     m_animationStatus = ANIMATE_NONE;
