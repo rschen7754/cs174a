@@ -20,31 +20,31 @@
 
 //For whatever reason when we use this version of the code the rectangles (say the ship) draw really strangely. Commenting out for now.
 
-void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
+void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const vec3& normal, vec3 cubeNormals[])
 {
     points[Index] = vertices[a];
     cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(0.0f, 1.0f);
+  //  cubeUV[Index] = point2(0.0f, 1.0f);
     Index++;
     points[Index] = vertices[b];
     cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(0.0f, 0.0f);
+   // cubeUV[Index] = point2(0.0f, 0.0f);
     Index++;
     points[Index] = vertices[c];
     cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(1.0f, 0.0f);
+   // cubeUV[Index] = point2(1.0f, 0.0f);
     Index++;
     points[Index] = vertices[a];
     cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(0.0f, 1.0f);
+  //  cubeUV[Index] = point2(0.0f, 1.0f);
     Index++;
     points[Index] = vertices[c];
     cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(1.0f, 0.0f);
+   // cubeUV[Index] = point2(1.0f, 0.0f);
     Index++;
     points[Index] = vertices[d];
     cubeNormals[Index] = normal;
-    cubeUV[Index] = point2(1.0f, 1.0f);
+   // cubeUV[Index] = point2(1.0f, 1.0f);
     Index++;
 
     
@@ -65,14 +65,14 @@ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const
 
 
 // Creates a cube given a set of vertices and color
-void colorcube(point4 vertices[], int indexColor, point4 points[])
+void colorcube(point4 vertices[], int indexColor, point4 points[], vec3 normals[])
 {
-    quad( 1, 0, 3, 2, vertices, points, point3( 0.0f,  0.0f,  1.0f) );
-    quad( 2, 3, 7, 6, vertices, points, point3( 1.0f,  0.0f,  0.0f) );
-    quad( 3, 0, 4, 7, vertices, points, point3( 0.0f, -1.0f,  0.0f) );
-    quad( 6, 5, 1, 2, vertices, points, point3( 0.0f,  1.0f,  0.0f) );
-    quad( 4, 5, 6, 7, vertices, points, point3( 0.0f,  0.0f, -1.0f) );
-    quad( 5, 4, 0, 1, vertices, points, point3(-1.0f,  0.0f,  0.0f) );
+    quad( 1, 0, 3, 2, vertices, points, vec3( 0.0f,  0.0f,  1.0f), normals );
+    quad( 2, 3, 7, 6, vertices, points, vec3( 1.0f,  0.0f,  0.0f) , normals);
+    quad( 3, 0, 4, 7, vertices, points, vec3( 0.0f, -1.0f,  0.0f), normals );
+    quad( 6, 5, 1, 2, vertices, points, vec3( 0.0f,  1.0f,  0.0f) , normals);
+    quad( 4, 5, 6, 7, vertices, points, vec3( 0.0f,  0.0f, -1.0f), normals );
+    quad( 5, 4, 0, 1, vertices, points, vec3(-1.0f,  0.0f,  0.0f) , normals);
 }
 
 
@@ -90,26 +90,47 @@ void createCube(point4 cube[], int x, int y, int z, int width, int height, int l
     
 }
 
-void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height,GLfloat length,  point4 points[])
+void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height,GLfloat length,  point4 points[], vec3 normals[])
 {
     Index = 0;
     createCube(cube, x, y, z,width,height, length);
-    colorcube(cube, 0, points);
+    colorcube(cube, 0, points, normals);
 }
 
 // Draws a rectangle
-void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z, int texture)
+void drawRectangle(point4 points[], vec3 normals[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z, int texture)
 {
     
+//    // Create and initialize a buffer object
+//    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices + sizeof(vec3)*NumVertices, NULL, GL_STATIC_DRAW );
+//    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*NumVertices, points );
+//    glBufferSubData(GL_ARRAY_BUFFER, sizeof(point4)*NumVertices, sizeof(vec3)*NumVertices, normals);
+
+    
     // Create and initialize a buffer object
-    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices, NULL, GL_STATIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices , NULL, GL_STATIC_DRAW );
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*NumVertices, points );
     
+    
+
     // set up vertex arrays
     glEnableVertexAttribArray( vPosition );
     glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+ //   glEnableVertexAttribArray( vNormal );
+  //  glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(point4)*NumVertices) );
+    
+    // Collin's Light Code ========================================================
+    
+    point4 light_position( 0.0, 0.0, -20.0, 1.0 );
+    glUniform4fv( glGetUniformLocation(program, "LightPosition"), 1, light_position );
+
+    
+    // Collin's Light Code ========================================================
     
     // Create model_view matrix to transform and rotate the cubes
+    mat4 transform = Translate(x, y, z);
+    glUniformMatrix4fv(glGetUniformLocation(program, "Transformation"), 1,GL_TRUE,transform);
+    
     mat4  mv =Translate(pos_x, pos_y,pos_z)*Translate(x, y, z);
     glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
     
@@ -118,10 +139,10 @@ void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z
     glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
     glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, fColor);
     
-    if (texture==1) {
-        glBindTexture( GL_TEXTURE_2D, texture_cube );
-        glUniform1i( uEnableTex, 1 );
-    }
+//    if (texture==1) {
+//        glBindTexture( GL_TEXTURE_2D, texture_cube );
+//        glUniform1i( uEnableTex, 1 );
+//    }
     // Draw proper items
     glDrawArrays( GL_TRIANGLES, 0, NumVertices );
     
@@ -207,9 +228,9 @@ Player::Player(int x, int y)
     m_oldx = m_posx;
     
     // Initialize Ship Rectangles
-    intializeRectangle(x, y, -20, 0,0,10, shipCenter);
-    intializeRectangle(x + 5, y, -20 +3, 0, -2,5, shipleft);
-    intializeRectangle(x-5, y, -20 +3, 0, -2, 5, shipRight);
+    intializeRectangle(x, y, -20, 0,0,10, shipCenter, shipCenterNormals);
+    intializeRectangle(x + 5, y, -20 +3, 0, -2,5, shipleft, shipleftNormals);
+    intializeRectangle(x-5, y, -20 +3, 0, -2, 5, shipRight, shipRightNormals);
     
 }
 
@@ -336,9 +357,9 @@ bool Player:: didCollide(){
 
 
 void Player::draw(){
-    drawRectangle(shipleft, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
-    drawRectangle(shipCenter, COLOR_GREY, m_posx, m_posy, m_posz, 0);
-    drawRectangle(shipRight, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
+    drawRectangle(shipleft, shipleftNormals, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
+    drawRectangle(shipCenter,shipCenterNormals, COLOR_GREY, m_posx, m_posy, m_posz, 0);
+    drawRectangle(shipRight, shipRightNormals, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
     std::cerr << pos_x << "\n";
     
 }
@@ -351,7 +372,7 @@ Player User(0,0);
 void init() {
     
     // Initialize 5x5 Blocks
-    intializeRectangle(0, 0, 0, 0, 0, 0, blockModel);
+    intializeRectangle(0, 0, 0, 0, 0, 0, blockModel, blockModelNormals);
     
     glGenVertexArraysAPPLE(1, &vao[0]);
     glBindVertexArrayAPPLE(vao[0]);
@@ -432,6 +453,9 @@ void init() {
     glUniform4f(uLightPos,  0.0f, 10.0f, 20.0f, 0.0f);
     glUniform1f(uShininess, 100.0f);
     
+
+    
+    
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -467,7 +491,7 @@ void displayHandler() {
     
     // Draw the map
     for (int i = 0; i < blocks.size(); i++) {
-        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), blocks[i].x, blocks[i].y, blocks[i].z, 1);
+        drawRectangle(blockModel, blockModelNormals, vec4(0.0,1.0,0.0,1.0), blocks[i].x, blocks[i].y, blocks[i].z, 1);
     }
     
     // Handles the animation for the ship
