@@ -636,13 +636,19 @@ void displayHandler() {
         
         User.didCollide();
     }
-    
-    if (!User.isAlive()) {
+    if ((User.getZ()*-1) >= end) {
+        glutPrint(-1.8 , 35,-50, "You won!", 1.0, 1.0, 1.0, 1.0);
+        glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
+        glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
+    }
+    else if (!User.isAlive()) {
          glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
          glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
 		 glutPrint(-25, 35, -50,"Health: 0", 1.0, 1.0, 1.0, 1.0);
         
-    }else{
+    }
+    
+    else{
         glutPrint(-25, 45, -50,ss.str(), 1.0, 1.0, 1.0, 1.0);
 		glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
     }
