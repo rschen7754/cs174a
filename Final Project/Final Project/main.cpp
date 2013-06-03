@@ -239,7 +239,7 @@ void Player::reinitializePlayer()
  //   m_posx = 0;
  //   m_posy = 0;
  //   m_posz = 0;
-    health=5;
+    health=7;
     m_isAlive = true;
     m_heightLevel = HEIGHT_CENTER;
     m_animationStatus = ANIMATE_NONE;
@@ -636,19 +636,18 @@ void displayHandler() {
         
         User.didCollide();
     }
-    if ((User.getZ()*-1) >= end) {
-        glutPrint(-1.8 , 35,-50, "You won!", 1.0, 1.0, 1.0, 1.0);
-        glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
-        glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
-    }
-    else if (!User.isAlive()) {
+    
+        if ((User.getZ()*-1) >= end) {
+                glutPrint(-1.8 , 35,-50, "You won!", 1.0, 1.0, 1.0, 1.0);
+                glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
+                glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
+            }
+        else if (!User.isAlive()) {
          glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
          glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
 		 glutPrint(-25, 35, -50,"Health: 0", 1.0, 1.0, 1.0, 1.0);
         
-    }
-    
-    else{
+    }else{
         glutPrint(-25, 45, -50,ss.str(), 1.0, 1.0, 1.0, 1.0);
 		glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
     }
