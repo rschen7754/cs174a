@@ -94,7 +94,6 @@ const int NumVertices = 36;
 
 point4 cube[NumVertices];
 
-
 point4 shipleft[NumVertices];
 vec3 shipleftNormals[NumVertices];
 point2 shipleftUV[NumVertices];

@@ -196,7 +196,7 @@ public:
     GLfloat getZ();
     
     // Round Positions to Integer Value
-    void RoundPositions();
+    void RoundPositions(int animation);
     
     // Draw Ship
     void draw();
@@ -250,7 +250,7 @@ void Player::reinitializePlayer()
 void Player::move(int dir)
 {
     GLfloat speed = 1.7;
-    GLfloat movement = DTIME*200*speed;
+    GLfloat movement = DTIME*250*speed;
     if (dir == UP) {
         m_posy += movement;
         pos_y -= movement;
@@ -294,8 +294,6 @@ void Player::setAnimationStatus(int status)
     if(status == ANIMATE_LEFT || status == ANIMATE_RIGHT)
     {
         m_oldx = m_posx;
-    }else if (status == ANIMATE_NONE){
-        RoundPositions();
     }
     m_animationStatus = status;
     
@@ -322,13 +320,31 @@ bool Player::isAlive(){
     return m_isAlive;
 }
 
-void Player::RoundPositions()
+void Player::RoundPositions(int animation)
 {
-    m_posx = static_cast<int>(m_posx);
-    m_posy = static_cast<int>(m_posy);
+    
+    if (animation == ANIMATE_LEFT) {
+            m_posx = getOldX() - 25;
+    }else if (animation == ANIMATE_RIGHT)
+    {
+        m_posx = getOldX() + 25;
+    }else 
+    {
+        if (getHeightLevel() == HEIGHT_TOP) {
+            m_posy = 15;
+        }else if (getHeightLevel() == HEIGHT_CENTER)
+        {
+            m_posy = 0;
+        }else{
+            m_posy = -15;
+        }
+    }
+
     
     pos_x = -m_posx - 2.0;
     pos_y = -m_posy -15.0;
+    
+    
 }
 
 bool Player:: didCollide(){
@@ -339,21 +355,25 @@ bool Player:: didCollide(){
     for (int i = 0; i < blocks.size(); i++) {
 
         
-        if ((m_posx+10 > blocks[i].x && m_posx-5 < blocks[i].x+5) &&
+        if ((m_posx+5 >= blocks[i].x && m_posx-5 <= blocks[i].x+5) &&
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
             (m_posz -30< blocks[i].z && m_posz > blocks[i].z+5)) {
 			health--;
-        
-            blocks.erase(it);
             
             if (health <= 0)
 			{
+                std::cerr << "m_posx: " << m_posx -5<< "\n";
+                std::cerr << "blockx: " << blocks[i].x +5<< "\n";
 				setDead();
 				menuState = MENU_OVER;
-			}
+
+			}else{
+                it+=i;
+                blocks.erase(it);
+            }
             return true;
         }
-                it++;
+           
         
         
     }
@@ -372,9 +392,7 @@ bool Player:: didCollide(){
 void Player::draw(){
     drawRectangle(shipleft, shipleftNormals, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
     drawRectangle(shipCenter,shipCenterNormals, COLOR_GREY, m_posx, m_posy, m_posz, 0);
-    drawRectangle(shipRight, shipRightNormals, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
-    std::cerr << pos_x << "\n";
-    
+    drawRectangle(shipRight, shipRightNormals, COLOR_BLUE, m_posx, m_posy, m_posz, 0);    
 }
 
 
@@ -515,6 +533,7 @@ void displayHandler() {
             }else{
                 User.setHeightLevel(HEIGHT_CENTER);
                 User.setAnimationStatus(ANIMATE_NONE);
+                                User.RoundPositions(ANIMATE_UP);
             }
         }
         else if(User.getHeightLevel() == HEIGHT_CENTER){
@@ -523,6 +542,7 @@ void displayHandler() {
             }else{
                 User.setHeightLevel(HEIGHT_TOP);
                 User.setAnimationStatus(ANIMATE_NONE);
+                User.RoundPositions(ANIMATE_UP);
             }
             
         }
@@ -536,6 +556,7 @@ void displayHandler() {
             }else{
                 User.setHeightLevel(HEIGHT_CENTER);
                 User.setAnimationStatus(ANIMATE_NONE);
+                User.RoundPositions(ANIMATE_DOWN);
             }
         }else if (User.getHeightLevel() == HEIGHT_CENTER)
         {
@@ -544,15 +565,17 @@ void displayHandler() {
             }else{
                 User.setHeightLevel(HEIGHT_BOTTOM);
                 User.setAnimationStatus(ANIMATE_NONE);
+                User.RoundPositions(ANIMATE_DOWN);
             }
         }
         else
             User.setAnimationStatus(ANIMATE_NONE);
     }else if (User.getAnimationStatus() == ANIMATE_LEFT){
-        if (static_cast<int>(User.getX())  >= static_cast<int>(User.getOldX()) -24) {
+        if (static_cast<int>(User.getX())  >= static_cast<int>(User.getOldX()) - 24) {
             User.move(LEFT);
         }else{
             User.setAnimationStatus(ANIMATE_NONE);
+            User.RoundPositions(ANIMATE_LEFT);
         }
     }else if (User.getAnimationStatus() == ANIMATE_RIGHT)
     {
@@ -560,6 +583,7 @@ void displayHandler() {
             User.move(RIGHT);
         }else{
             User.setAnimationStatus(ANIMATE_NONE);
+            User.RoundPositions(ANIMATE_RIGHT);
         }
     }
     
