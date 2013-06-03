@@ -1,38 +1,44 @@
 
 #include "iostream"
 #include "fstream"
+#include <string>
 #include <vector>
-//#include "main.h"
 using namespace std;
 
 
-const int MAXROWS = 20;
-const int MAXCOLS = 20;
-char mapInput[MAXROWS][MAXCOLS];
-int map[MAXROWS][MAXCOLS-10];
+std::vector<char> mapInputVec2;
+std::vector<std::vector <int>> mapVec;
 
 bool readFile()
 {
 	ifstream mapfile;
 	mapfile.open ("map.txt");
-	if (mapfile.is_open()) 
+	char inputLetter = 'z';
+	int mapWidth = 0;
+	while (inputLetter != '\n')
 	{
-		for (int i = 0; i < MAXROWS; i++)
+		inputLetter = mapfile.get();
+		mapWidth++;
+	}
+	mapfile.close();
+
+	mapfile.open ("map.txt");
+	if (mapfile.is_open())
+	{
+		//bool eofReached = false;
+		while (mapfile.eof() == false)
 		{
-			for (int j = 0; j<MAXCOLS; j++)
+			std::string str;
+			std::getline(mapfile,str);
+			//char tChar;
+			//mapfile >> tChar;
+			string::iterator it;
+			int index = 0;
+			for ( it = str.begin() ; it < str.end(); it++ ,index++)
 			{
-				if (!mapfile || mapfile.eof()) 
-				{
-					break;
-				}
-				else
-				{
-					mapfile >> mapInput[i][j];
-					//Testing Output
-					//cout<<mapInput[i][j];
-				}
+				mapInputVec2.push_back(*it);
 			}
-			//cout << endl;
+			mapInputVec2.push_back('\n');
 		}
 	}
 	else 
@@ -42,66 +48,80 @@ bool readFile()
 	}
 	mapfile.close();
 
-	//convert to 20x10 map coordinate
-	int rowCounter = 0;
-	int colCounter = 0;
-	for (int i = 0; i < MAXROWS; i++)
+	//filter out tabs and new lines
+	char tempChar;
+	std::vector<int> tempVec;
+	//for (int i = 0; i< mapWidth; i++)
+	std::vector<char>::iterator it = mapInputVec2.begin();
+	int sizeInput = mapInputVec2.size();
+	int counter = 0;
+	while(counter < sizeInput)
 	{
-		for (int j = 0; j < MAXCOLS; j++)
+		tempChar = *it; 
+		if (tempChar == 'o')
 		{
-			if (mapInput[i][j] == 'o')
-			{
-				map[rowCounter][colCounter] = 2;
-				colCounter++;
-			}
-			else if (mapInput[i][j] == 'b')
-			{
-				map[rowCounter][colCounter] = 0;
-				colCounter++;
-			}
-			else if (mapInput[i][j] == 'x')
-			{
-				map[rowCounter][colCounter] = 1;
-				colCounter++;
-			}
-			/*
-			else if (mapInput[i][j] == '\t' || mapInput[i][j] == '\n')
-			{
-				//map[i][j] = 0;
-			} */
-			if (colCounter == (MAXCOLS-10))
-			{
-				colCounter = 0;
-				rowCounter++;
-			}
+			tempVec.push_back(2);
 		}
-	}
-
-	//Test to see if map accurately generated
-	/*
-	for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j< 10; j++)
+		else if (tempChar == 'b')
 		{
-			cout << map[i][j];
+			tempVec.push_back(0);
 		}
-		cout << endl;
+		else if (tempChar == 'x')
+		{
+			tempVec.push_back(1);
+		}
+		else if (tempChar == '\n' && counter+1 < sizeInput)
+		{
+			mapVec.push_back(tempVec);
+			tempVec.clear();
+		}
+		++it;
+		counter++;
 	}
-	*/
 	return true;
 }
 
 void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 {
-	//cubePos tempBlock;
-	for (int i = 0; i < MAXROWS; i++)
+
+	vector< vector<int> >::iterator row;
+	vector<int>::iterator col;
+	int itr1=0;
+	int itr2=0;
+	int xshift = 0;
+	int mapWidth = 0;
+	for (row = mapVec.begin(); row != mapVec.end(); row++)
 	{
-		for (int j = 0; j< MAXCOLS-10; j++)
+		int tempCounter = 0;
+		for (col = row->begin(); col != row->end(); col++)
 		{
-			if (map[i][j] == 1)
+			tempCounter++;
+		}
+		if (tempCounter > mapWidth)
+			mapWidth = tempCounter;
+	}
+	xshift = mapWidth;
+	xshift = (xshift*25)/2; //to center player
+
+	for (row = mapVec.begin(); row != mapVec.end(); row++)
+	{
+		//create wall on right side
+		xPos.push_back((float)(itr1*25-xshift)); //left and right
+		zPos.push_back((float)(itr2*50+300)); //into the screen
+		yPos.push_back(-15); // vertical position
+		xPos.push_back((float)(itr1*25-xshift)); //left and right
+		zPos.push_back((float)(itr2*50+300)); //into the screen
+		yPos.push_back(0);
+		xPos.push_back((float)(itr1*25-xshift)); //left and right
+		zPos.push_back((float)(itr2*50+300)); //into the screen
+		yPos.push_back(15);
+		for (col = row->begin(); col != row->end(); col++)
+		{
+			//if (map[i][j] == 1)
+			if (*col == 1)
 			{
-				xPos.push_back((float)(i*25-100)); //left and right
-				zPos.push_back((float)(j*50+300)); //into the screen
+				xPos.push_back((float)(itr1*25-xshift)); //left and right
+				zPos.push_back((float)(itr2*50+300)); //into the screen
 				int randomNum = (rand() % 3);
 				if (randomNum == 0)
 					yPos.push_back(-15); // vertical position
@@ -109,10 +129,32 @@ void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 					yPos.push_back(0);
 				else
 					yPos.push_back(15);
-                
-
 			}
+			itr1++;
 		}
+		//create wall on left side
+		xPos.push_back((float)(mapWidth*25-xshift)); //left and right
+		zPos.push_back((float)(itr2*50+300)); //into the screen
+		yPos.push_back(-15); // vertical position
+		xPos.push_back((float)(mapWidth*25-xshift)); //left and right
+		zPos.push_back((float)(itr2*50+300)); //into the screen
+		yPos.push_back(0);
+		xPos.push_back((float)(mapWidth*25-xshift)); //left and right
+		zPos.push_back((float)(itr2*50+300)); //into the screen
+		yPos.push_back(15);
+
+		itr1 = 0;
+		itr2++;
 	}
-    
+	//Test code
+	vector<float>::iterator counter = xPos.begin();
+	vector<float>::iterator counter2 = yPos.begin();
+	vector<float>::iterator counter3 = zPos.begin();
+	for (counter = xPos.begin(); counter != xPos.end(); counter++)
+	{
+		cout<< *counter << ' '<< *counter2 << ' ' << *counter3 << endl;
+		counter2++;
+		counter3++;
+	}
+	return;
 }

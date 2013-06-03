@@ -13,7 +13,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "634"
          endingLineNumber = "634"
-         landmarkName = "main(int argc, char** argv)"
+         landmarkName = "buttonHandler(int button, int state, int x, int y)"
          landmarkType = "7">
       </FileBreakpoint>
    </FileBreakpoints>

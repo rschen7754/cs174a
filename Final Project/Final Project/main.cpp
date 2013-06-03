@@ -16,8 +16,26 @@
 // quad generates two triangles for each face and assigns colors
 //    to the vertices
 
+//For whatever reason when we use this version of the code the rectangles (say the ship) draw really strangely. Commenting out for now.
+/*
+void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
+{
+    points[Index] = vertices[a]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 1.0f); Index++;
+    points[Index] = vertices[b]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 0.0f); Index++;
+    points[Index] = vertices[c]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 0.0f); Index++;
+    points[Index] = vertices[a]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(0.0f, 1.0f); Index++;
+    points[Index] = vertices[c]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 0.0f); Index++;
+    points[Index] = vertices[d]; cubeNormals[Index] = normal;
+    cubeUV[Index] = point2(1.0f, 1.0f); Index++;
+ 
+}*/
 
-void quad( int a, int b, int c, int d, point4 vertices[], point4 points[])
+void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
 {
     points[Index] = vertices[a]; Index++;
     points[Index] = vertices[b]; Index++;
@@ -27,16 +45,18 @@ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[])
     points[Index] = vertices[d]; Index++;
     
 }
+ 
+
 
 // Creates a cube given a set of vertices and color
 void colorcube(point4 vertices[], int indexColor, point4 points[])
 {
-    quad( 1, 0, 3, 2 ,vertices, points);
-    quad( 2, 3, 7, 6 ,vertices, points);
-    quad( 3, 0, 4, 7 ,vertices, points);
-    quad( 6, 5, 1, 2 ,vertices, points);
-    quad( 4, 5, 6, 7 ,vertices, points);
-    quad( 5, 4, 0, 1 ,vertices, points);
+    quad( 1, 0, 3, 2, vertices, points, point3( 0.0f,  0.0f,  1.0f) );
+    quad( 2, 3, 7, 6, vertices, points, point3( 1.0f,  0.0f,  0.0f) );
+    quad( 3, 0, 4, 7, vertices, points, point3( 0.0f, -1.0f,  0.0f) );
+    quad( 6, 5, 1, 2, vertices, points, point3( 0.0f,  1.0f,  0.0f) );
+    quad( 4, 5, 6, 7, vertices, points, point3( 0.0f,  0.0f, -1.0f) );
+    quad( 5, 4, 0, 1, vertices, points, point3(-1.0f,  0.0f,  0.0f) );
 }
 
 
@@ -334,13 +354,14 @@ void init() {
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
     //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
     
-    TgaImage menuImage;
-    if (!menuImage.loadTGA("menu.tga"))
+    TgaImage cubeImage;
+    if (!cubeImage.loadTGA("cube_Texture.tga"))
     {
         printf("Error loading image file menu\n");
         exit(1);
     }
     
+<<<<<<< HEAD
     TgaImage gameoverImage;
     if (!gameoverImage.loadTGA("gameover.tga"))
     {
@@ -348,6 +369,9 @@ void init() {
         exit(1);
     }
     
+=======
+
+>>>>>>> 9b18d7528065dc5cac33cea530da24a74b362368
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
     uDiffuse   = glGetUniformLocation( program, "DiffuseProduct"  );
@@ -413,7 +437,13 @@ void displayHandler() {
             }
             
         }
+<<<<<<< HEAD
         
+=======
+        else
+             User.setAnimationStatus(ANIMATE_NONE);
+
+>>>>>>> 9b18d7528065dc5cac33cea530da24a74b362368
     }else if (User.getAnimationStatus() == ANIMATE_DOWN)
     {
         
@@ -433,6 +463,8 @@ void displayHandler() {
                 User.setAnimationStatus(ANIMATE_NONE);
             }
         }
+        else
+             User.setAnimationStatus(ANIMATE_NONE);
     }else if (User.getAnimationStatus() == ANIMATE_LEFT){
         if (static_cast<int>(User.getX())  >= static_cast<int>(User.getOldX()) -24) {
             User.move(LEFT);
@@ -452,13 +484,17 @@ void displayHandler() {
     
     //draw menu
     if (menuState==MENU_ON || menuState == MENU_OVER) {
+<<<<<<< HEAD
         mat4  mv =Translate(0, 0,pos_z);
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+=======
+>>>>>>> 9b18d7528065dc5cac33cea530da24a74b362368
         
         //orthographic projection
         p = Ortho(2*left, 2*right, 2*bottom, 2*top, zNear, zFar);
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
         
+<<<<<<< HEAD
         
         glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, COLOR_MENU);
         glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
@@ -467,6 +503,9 @@ void displayHandler() {
         // glDrawArrays( GL_TRIANGLES, 0, 6 );
         
         mv =Translate(pos_x+2.5, pos_y,pos_z);
+=======
+        mat4 mv =Translate(pos_x+2.5, pos_y,pos_z);
+>>>>>>> 9b18d7528065dc5cac33cea530da24a74b362368
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
         
      //   glutPrint(-5.5,20, "Welcome to SpaceRunner!", 1, 1, 1, 1);
@@ -542,6 +581,7 @@ void keyHandler(unsigned char key, int x, int y) {
             if (menuState != MENU_PLAY) {
                 menuState = MENU_PLAY;
                 TM.Reset();
+                User.setAnimationStatus(ANIMATE_NONE);
             }
             break;
             
@@ -622,7 +662,7 @@ int main(int argc, char** argv)
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition (0, 0);
     glutInitWindowSize(Width,Height);
-    glutCreateWindow( "Game");
+    glutCreateWindow( "SpaceRunner");
     //printf("GL version %s\n", glGetString(GL_VERSION));
     glewExperimental = GL_TRUE;
     glewInit();
