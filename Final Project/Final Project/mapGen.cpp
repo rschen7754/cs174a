@@ -81,7 +81,7 @@ bool readFile()
 	return true;
 }
 
-void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
+int storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 {
 
 	vector< vector<int> >::iterator row;
@@ -103,6 +103,7 @@ void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 	xshift = mapWidth;
 	xshift = (xshift*25)/2; //to center player
 
+	int lastRow = 0;
 	for (row = mapVec.begin(); row != mapVec.end(); row++)
 	{
 		//create wall on right side
@@ -144,6 +145,7 @@ void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 		yPos.push_back(15);
 
 		itr1 = 0;
+		lastRow = itr2*50+300;
 		itr2++;
 	}
 	//Test code
@@ -156,5 +158,7 @@ void storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 		counter2++;
 		counter3++;
 	}
-	return;
+	cout <<endl;
+	cout << lastRow << endl;
+	return lastRow;
 }
