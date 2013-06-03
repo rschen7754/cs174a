@@ -37,6 +37,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A78AF5CC175C2C62001FCE8E /* cube_Texture2.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = cube_Texture2.tga; sourceTree = "<group>"; };
 		A7CC53F817580C6E000024A6 /* Timer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
 		A7CC53F917580C6E000024A6 /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
 		BC63B43717508229007559CA /* Final Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Final Project"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +124,7 @@
 				BC63B43A17508229007559CA /* main.cpp */,
 				BCE982511757FDBD00DB1D40 /* main.h */,
 				BCE982541759FB2C00DB1D40 /* gameover.tga */,
+				A78AF5CC175C2C62001FCE8E /* cube_Texture2.tga */,
 				BCE982551759FB2C00DB1D40 /* menu.tga */,
 				BCCE33A71753F7770099B924 /* map.txt */,
 				BCE2AEF4175C1DDA008207AB /* cube_Texture.tga */,

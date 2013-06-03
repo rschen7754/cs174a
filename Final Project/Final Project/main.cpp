@@ -355,23 +355,13 @@ void init() {
     //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
     
     TgaImage cubeImage;
-    if (!cubeImage.loadTGA("cube_Texture.tga"))
+    if (!cubeImage.loadTGA("cube_Texture2.tga"))
     {
         printf("Error loading image file menu\n");
         exit(1);
     }
     
-<<<<<<< HEAD
-    TgaImage gameoverImage;
-    if (!gameoverImage.loadTGA("gameover.tga"))
-    {
-        printf("Error loading image file gameover\n");
-        exit(1);
-    }
-    
-=======
 
->>>>>>> 9b18d7528065dc5cac33cea530da24a74b362368
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
     uDiffuse   = glGetUniformLocation( program, "DiffuseProduct"  );
@@ -437,13 +427,7 @@ void displayHandler() {
             }
             
         }
-<<<<<<< HEAD
-        
-=======
-        else
-             User.setAnimationStatus(ANIMATE_NONE);
 
->>>>>>> 9b18d7528065dc5cac33cea530da24a74b362368
     }else if (User.getAnimationStatus() == ANIMATE_DOWN)
     {
         
@@ -484,28 +468,15 @@ void displayHandler() {
     
     //draw menu
     if (menuState==MENU_ON || menuState == MENU_OVER) {
-<<<<<<< HEAD
-        mat4  mv =Translate(0, 0,pos_z);
-        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-=======
->>>>>>> 9b18d7528065dc5cac33cea530da24a74b362368
+
         
         //orthographic projection
         p = Ortho(2*left, 2*right, 2*bottom, 2*top, zNear, zFar);
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
         
-<<<<<<< HEAD
-        
-        glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, COLOR_MENU);
-        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
-        
-        //kept drawing on top of the text :(
-        // glDrawArrays( GL_TRIANGLES, 0, 6 );
-        
-        mv =Translate(pos_x+2.5, pos_y,pos_z);
-=======
+
         mat4 mv =Translate(pos_x+2.5, pos_y,pos_z);
->>>>>>> 9b18d7528065dc5cac33cea530da24a74b362368
+ 
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
         
      //   glutPrint(-5.5,20, "Welcome to SpaceRunner!", 1, 1, 1, 1);
