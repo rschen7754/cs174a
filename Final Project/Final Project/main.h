@@ -52,11 +52,24 @@ const static int MENU_ON=1;
 const static int MENU_PLAY=2;
 const static int MENU_OVER=3;
 
+const int ANIMATE_NONE = 0;
+const int ANIMATE_UP = 1;
+const int ANIMATE_DOWN = 2;
+const int ANIMATE_RIGHT = 3;
+const int ANIMATE_LEFT = 4;
+
+
+const int HEIGHT_BOTTOM = 0;
+const int HEIGHT_CENTER = 1;
+const int HEIGHT_TOP = 2;
+
 const int UP = 0;
 const int DOWN = 1;
 const int LEFT = 2;
 const int RIGHT = 3;
 const int FORWARD = 4;
+
+float SCORE = 0;
 
 int Width = 800;
 int Height = 800 ;

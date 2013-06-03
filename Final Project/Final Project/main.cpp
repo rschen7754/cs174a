@@ -8,16 +8,6 @@
 
 #include "main.h"
 
-const int ANIMATE_NONE = 0;
-const int ANIMATE_UP = 1;
-const int ANIMATE_DOWN = 2;
-const int ANIMATE_RIGHT = 3;
-const int ANIMATE_LEFT = 4;
-
-
-const int HEIGHT_BOTTOM = 0;
-const int HEIGHT_CENTER = 1;
-const int HEIGHT_TOP = 2;
 
 
 //==============================================
@@ -74,7 +64,7 @@ void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat 
 // Draws a rectangle
 void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z)
 {
-
+    
     // Create and initialize a buffer object
     glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*NumVertices, NULL, GL_STATIC_DRAW );
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*NumVertices, points );
@@ -137,6 +127,8 @@ public:
     // Get the value of the width counter
     GLfloat getOldX();
     
+    GLfloat getZ();
+    
     // Round Positions to Integer Value
     void RoundPositions();
     
@@ -181,27 +173,33 @@ Player::Player(int x, int y)
 void Player::move(int dir)
 {
     GLfloat speed = 1.7;
+    GLfloat movement = DTIME*100*speed;
     if (dir == UP) {
-        m_posy += DTIME*100*speed;
-        pos_y -= DTIME*100*speed;
+        m_posy += movement;
+        pos_y -= movement;
     }else if (dir == DOWN){
-        m_posy -= DTIME*100*speed;
-        pos_y += DTIME*100*speed;
+        m_posy -= movement;
+        pos_y += movement;
     }else if (dir == LEFT){
-        m_posx -= DTIME*100*speed;
-        pos_x += DTIME*100*speed;
+        m_posx -= movement;
+        pos_x += movement;
     }else if (dir == RIGHT){
-        m_posx += DTIME * 100*speed;
-        pos_x -= DTIME * 100*speed;
+        m_posx += movement;
+        pos_x -= movement;
     }else if (dir == FORWARD){
-        m_posz -= DTIME*100;
-        pos_z += DTIME*100;
+        m_posz -= movement/speed;
+        pos_z += movement/speed;
     }
 }
 
 int Player::getHeightLevel()
 {
     return m_heightLevel;
+}
+
+GLfloat Player::getZ()
+{
+    return m_posz;
 }
 
 void Player::setHeightLevel(int height)
@@ -223,7 +221,7 @@ void Player::setAnimationStatus(int status)
         RoundPositions();
     }
     m_animationStatus = status;
-
+    
 }
 
 GLfloat Player::getOldX()
@@ -252,8 +250,9 @@ void Player::RoundPositions()
 {
     m_posx = static_cast<int>(m_posx);
     m_posy = static_cast<int>(m_posy);
-    pos_x = static_cast<int>(pos_x);
-    pos_y = static_cast<int>(pos_y);
+    
+    pos_x = -m_posx - 2.0;
+    pos_y = -m_posy -15.0;
 }
 
 bool Player:: didCollide(){
@@ -268,8 +267,8 @@ bool Player:: didCollide(){
             menuState = MENU_OVER;
             return true;
         }
-
-
+        
+        
         
     }
     
@@ -302,20 +301,20 @@ void init() {
     glGenBuffers( 1, &buffer );
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
     
- 
+    
     program = InitShader( "vshader.glsl", "fshader.glsl" );
     
     glUseProgram(program);
 	//data stored in "map" (20x10 array of integers);
 	//0 = no block, 1 = block present, 2 = start position
-
+    
 	std::vector<float> xPos;
 	std::vector<float> yPos;
 	std::vector<float> zPos;
     readFile();
     storeBlocks(xPos, yPos, zPos);
 	int numBlocks = xPos.size();
-
+    
 	for (int i = 0; i < numBlocks; i++)
 	{
 		cubePos tempBlock;
@@ -323,9 +322,9 @@ void init() {
 		tempBlock.y = yPos[i];
 		tempBlock.z = -zPos[i];
 		blocks.push_back(tempBlock);
-
+        
 	}
-
+    
     ModelView = glGetUniformLocation( program, "ModelView" );
     Projection = glGetUniformLocation( program, "Projection" );
     
@@ -333,7 +332,7 @@ void init() {
     
     // Set black background
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
-   //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
+    //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
     
     TgaImage menuImage;
     if (!menuImage.loadTGA("menu.tga"))
@@ -348,7 +347,7 @@ void init() {
         printf("Error loading image file gameover\n");
         exit(1);
     }
-
+    
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
     uDiffuse   = glGetUniformLocation( program, "DiffuseProduct"  );
@@ -368,14 +367,15 @@ void init() {
 }
 
 
-void glutPrint(float x, float y, char* text, float r, float g, float b, float a)
+void glutPrint(float x, float y, float z, char* text, float r, float g, float b, float a)
 {
     if(!text || !strlen(text)) return;
     bool blending = false;
     if(glIsEnabled(GL_BLEND)) blending = true;
     glEnable(GL_BLEND);
     glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, color4(r,g,b,a));
-    glRasterPos2f(x,y);
+    //glRasterPos2f(x,y);
+    glRasterPos3f(x, y, z);
     while (*text) {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text);
         text++;
@@ -385,14 +385,15 @@ void glutPrint(float x, float y, char* text, float r, float g, float b, float a)
 
 void displayHandler() {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
     
     mat4 p;
     
     for (int i = 0; i < blocks.size(); i++) {
         drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), blocks[i].x, blocks[i].y, blocks[i].z);
     }
-    
+
+
+
     
     if (User.getAnimationStatus() == ANIMATE_UP) {
         if (User.getHeightLevel() == HEIGHT_BOTTOM) {
@@ -410,12 +411,12 @@ void displayHandler() {
                 User.setHeightLevel(HEIGHT_TOP);
                 User.setAnimationStatus(ANIMATE_NONE);
             }
-
+            
         }
-
+        
     }else if (User.getAnimationStatus() == ANIMATE_DOWN)
     {
-
+        
         if (User.getHeightLevel() == HEIGHT_TOP) {
             if (User.getY()>=0) {
                 User.move(DOWN);
@@ -453,7 +454,7 @@ void displayHandler() {
     if (menuState==MENU_ON || menuState == MENU_OVER) {
         mat4  mv =Translate(0, 0,pos_z);
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-
+        
         //orthographic projection
         p = Ortho(2*left, 2*right, 2*bottom, 2*top, zNear, zFar);
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
@@ -463,15 +464,15 @@ void displayHandler() {
         glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(menuBox), menuBox );
         
         //kept drawing on top of the text :(
-       // glDrawArrays( GL_TRIANGLES, 0, 6 ); 
+        // glDrawArrays( GL_TRIANGLES, 0, 6 );
         
         mv =Translate(pos_x+2.5, pos_y,pos_z);
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
         
-        glutPrint(-5.5,20, "Welcome to SpaceRunner!", 1, 1, 1, 1);
+     //   glutPrint(-5.5,20, "Welcome to SpaceRunner!", 1, 1, 1, 1);
         
         mv =Translate(pos_x+2.5, pos_y+15,pos_z);
-        glutPrint(-4.5,17, "Press Enter to begin.", 1, 1, 1, 1);
+    //    glutPrint(-4.5,17, "Press Enter to begin.", 1, 1, 1, 1);
         
     }
     
@@ -482,10 +483,14 @@ void displayHandler() {
         drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
         drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
         
-
-    
+        
+        
         User.didCollide();
     }
+
+        if (!User.isAlive()) {
+            glutPrint(User.getX(), User.getY(),User.getZ(), "Hello", 1.0, 1.0, 1.0, 1.0);
+        }
     
     glutSwapBuffers();
 }
@@ -557,26 +562,29 @@ void specialHandler(int key, int x, int y)
     if (menuState != MENU_PLAY)
         return;
     if (User.getAnimationStatus() == ANIMATE_NONE) {
-    switch (key) {
-            
-         
-        case GLUT_KEY_UP: // Moves the camera up
-            User.setAnimationStatus(ANIMATE_UP);
-            break;
-        case GLUT_KEY_DOWN: // Moves the camera down
-            User.setAnimationStatus(ANIMATE_DOWN);
-            break;
-        case GLUT_KEY_LEFT: // Turns the camera left
-            User.setAnimationStatus(ANIMATE_LEFT);
-            break;
-        case GLUT_KEY_RIGHT: // Turns the camera right
-            User.setAnimationStatus(ANIMATE_RIGHT);
-            break;
-            
-        default:
-            break;
-            
-    }
+        switch (key) {
+                
+            case GLUT_KEY_UP: // Moves the camera up
+                if (User.getHeightLevel() != HEIGHT_TOP) {
+                    User.setAnimationStatus(ANIMATE_UP);
+                }
+                break;
+            case GLUT_KEY_DOWN: // Moves the camera down
+                if (User.getHeightLevel() != HEIGHT_BOTTOM) {
+                    User.setAnimationStatus(ANIMATE_DOWN);
+                }
+                break;
+            case GLUT_KEY_LEFT: // Turns the camera left
+                User.setAnimationStatus(ANIMATE_LEFT);
+                break;
+            case GLUT_KEY_RIGHT: // Turns the camera right
+                User.setAnimationStatus(ANIMATE_RIGHT);
+                break;
+                
+            default:
+                break;
+                
+        }
     }
     
     glutPostRedisplay();
@@ -593,19 +601,20 @@ void motionHandler(int x, int y) {
 void idleHandler() {
     if (menuState==MENU_PLAY) {
         TIME = TM.GetElapsedTime() ;
-    
+        
         DTIME = TIME - TIME_LAST;
         TIME_LAST = TIME;
-    
-    
+        
+        
         User.move(FORWARD);
+        SCORE += DTIME*100;
         glutPostRedisplay();
     }
 }
 
 int main(int argc, char** argv)
 {
-
+    
     glutInit(&argc, argv);
     // If your code fails to run, uncommenting these lines may help.
     //glutInitContextVersion(3, 2);
@@ -631,7 +640,7 @@ int main(int argc, char** argv)
     glutMainLoop();
     
     return 0;         // never reached
-
+    
 }
 
-    
+
