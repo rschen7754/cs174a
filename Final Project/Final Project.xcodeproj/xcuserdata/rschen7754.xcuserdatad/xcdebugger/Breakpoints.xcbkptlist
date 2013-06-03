@@ -8,12 +8,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Final Project/main.cpp"
-         timestampString = "391917545.34951"
+         timestampString = "391923770.172875"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "257"
-         endingLineNumber = "257"
+         startingLineNumber = "275"
+         endingLineNumber = "275"
          landmarkName = "Player::setAnimationStatus(int status)"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Final Project/main.cpp"
+         timestampString = "391923770.172875"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "230"
+         endingLineNumber = "230"
+         landmarkName = "Player::move(int dir)"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
