@@ -12,7 +12,7 @@ std::vector<std::vector <int>> mapVec;
 bool readFile()
 {
 	ifstream mapfile;
-	mapfile.open ("map.txt");
+	mapfile.open ("mapnew.txt");
 	char inputLetter = 'z';
 	int mapWidth = 0;
 	while (inputLetter != '\n')
@@ -22,7 +22,7 @@ bool readFile()
 	}
 	mapfile.close();
 
-	mapfile.open ("map.txt");
+	mapfile.open ("mapnew.txt");
 	if (mapfile.is_open())
 	{
 		//bool eofReached = false;
