@@ -46,6 +46,7 @@ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const
     cubeNormals[Index] = normal;
     cubeUV[Index] = point2(1.0f, 1.0f);
     Index++;
+
     
 }
 /*
@@ -60,6 +61,7 @@ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const
  
  }
  */
+
 
 
 // Creates a cube given a set of vertices and color

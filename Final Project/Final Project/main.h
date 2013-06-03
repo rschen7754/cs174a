@@ -90,7 +90,8 @@ int Index = 0;
 const int NumVertices = 36;
 
 // Arrays to hold ship points
-point4 cube[8];
+
+point4 cube[NumVertices];
 point3 cubeNormals[NumVertices];
 point2 cubeUV[NumVertices];
 
