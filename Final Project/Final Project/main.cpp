@@ -624,7 +624,7 @@ void displayHandler() {
 
 	//Display health
 	std::stringstream healthDisp;
-    healthDisp <<"Health: " << health;
+    healthDisp <<"Lives: " << health;
     
     //draw menu
     if (menuState==MENU_ON || menuState == MENU_OVER) {
@@ -635,11 +635,11 @@ void displayHandler() {
         glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
         
         
-        mat4 mv =Translate(pos_x+2.5, pos_y,pos_z);
+        mat4 mv =Translate(pos_x, pos_y,pos_z);
         
         glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
         
-        glutPrint(-5.5,20,User.getZ(), "Welcome to SpaceRunner!", 1, 1, 1, 1);
+        glutPrint(-5.5,30,User.getZ(), "Welcome to SpaceRunner!", 1, 1, 1, 1);
         
         mv =Translate(pos_x+2.5, pos_y+15,pos_z);
         glutPrint(-4.5,17,User.getZ(), "Press Enter to begin.", 1, 1, 1, 1);
@@ -660,11 +660,16 @@ void displayHandler() {
         else if (!User.isAlive()) {
          glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
          glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
-		 glutPrint(-25, 35, -50,"Health: 0", 1.0, 1.0, 1.0, 1.0);
+		 glutPrint(-25, 35, -50,"Lives: 0", 1.0, 1.0, 1.0, 1.0);
         
     }else{
-        glutPrint(-25, 45, -50,ss.str(), 1.0, 1.0, 1.0, 1.0);
-		glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
+        mat4 mv=ModelView*Translate(pos_x-5, pos_y,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+        glutPrint(0, 45, -20,ss.str(), 1.0, 1.0, 1.0, 1.0);
+        
+        mv=ModelView*Translate(pos_x+5, pos_y,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+		glutPrint(-25, 35, -20,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
     }
     
 
