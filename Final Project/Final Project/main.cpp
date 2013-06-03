@@ -318,8 +318,12 @@ bool Player:: didCollide(){
         if ((m_posx+10 > blocks[i].x && m_posx-5 < blocks[i].x+5) &&
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
             (m_posz -30< blocks[i].z && m_posz > blocks[i].z+5)) {
-            setDead();
-            menuState = MENU_OVER;
+			lives--;
+            if (lives <= 0)
+			{
+				setDead();
+				menuState = MENU_OVER;
+			}
             return true;
         }
         
@@ -529,6 +533,10 @@ void displayHandler() {
     // Display the Score
     std::stringstream ss;
     ss <<"Score: " << SCORE;
+
+	//Display lives
+	std::stringstream livesDisp;
+    livesDisp <<"Lives: " << lives;
     
     //draw menu
     if (menuState==MENU_ON || menuState == MENU_OVER) {
@@ -559,9 +567,11 @@ void displayHandler() {
     if (!User.isAlive()) {
          glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
          glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
+		 glutPrint(-25, 35, -50,livesDisp.str(), 1.0, 1.0, 1.0, 1.0);
         
     }else{
         glutPrint(-25, 45, -50,ss.str(), 1.0, 1.0, 1.0, 1.0);
+		glutPrint(-25, 35, -50,livesDisp.str(), 1.0, 1.0, 1.0, 1.0);
     }
     
 
