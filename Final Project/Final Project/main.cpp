@@ -42,7 +42,7 @@ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const
     cubeUV[Index] = point2(1.0f, 0.0f); Index++;
     points[Index] = vertices[d]; cubeNormals[Index] = normal;
     cubeUV[Index] = point2(1.0f, 1.0f); Index++;
-    
+ 
 }*/
 
 void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const point3& normal)
@@ -55,6 +55,7 @@ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const
     points[Index] = vertices[d]; Index++;
     
 }
+ 
 
 
 // Creates a cube given a set of vertices and color
@@ -425,6 +426,8 @@ void displayHandler() {
             }
 
         }
+        else
+             User.setAnimationStatus(ANIMATE_NONE);
 
     }else if (User.getAnimationStatus() == ANIMATE_DOWN)
     {
@@ -445,6 +448,8 @@ void displayHandler() {
                 User.setAnimationStatus(ANIMATE_NONE);
             }
         }
+        else
+             User.setAnimationStatus(ANIMATE_NONE);
     }else if (User.getAnimationStatus() == ANIMATE_LEFT){
         if (static_cast<int>(User.getX())  >= static_cast<int>(User.getOldX()) -24) {
             User.move(LEFT);
