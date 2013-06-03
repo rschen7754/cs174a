@@ -82,7 +82,7 @@ void intializeRectangle(GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat 
 }
 
 // Draws a rectangle
-void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z)
+void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z, int texture)
 {
     
     // Create and initialize a buffer object
@@ -102,8 +102,14 @@ void drawRectangle(point4 points[], vec4 fColor, GLfloat x, GLfloat y, GLfloat z
     glUniformMatrix4fv( Projection, 1, GL_TRUE, p );
     glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, fColor);
     
+    if (texture==1) {
+        glBindTexture( GL_TEXTURE_2D, texture_cube );
+        glUniform1i( uEnableTex, 1 );
+    }
     // Draw proper items
     glDrawArrays( GL_TRIANGLES, 0, NumVertices );
+    
+    glUniform1i( uEnableTex, 0 );
     
 }
 
@@ -298,9 +304,9 @@ bool Player:: didCollide(){
 
 
 void Player::draw(){
-    drawRectangle(shipleft, COLOR_BLUE, m_posx, m_posy, m_posz);
-    drawRectangle(shipCenter, COLOR_GREY, m_posx, m_posy, m_posz);
-    drawRectangle(shipRight, COLOR_BLUE, m_posx, m_posy, m_posz);
+    drawRectangle(shipleft, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
+    drawRectangle(shipCenter, COLOR_GREY, m_posx, m_posy, m_posz, 0);
+    drawRectangle(shipRight, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
     
 }
 
@@ -361,7 +367,23 @@ void init() {
         exit(1);
     }
     
-
+    //load first texture
+    glGenTextures( 1, &texture_cube );
+    glBindTexture( GL_TEXTURE_2D, texture_cube );
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, cubeImage.width, cubeImage.height, 0,
+                 (cubeImage.byteCount == 3) ? GL_BGR : GL_BGRA,
+                 GL_UNSIGNED_BYTE, cubeImage.data );
+    glGenerateMipmap(GL_TEXTURE_2D);
+    
+    //nearest filtering
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
+    // Set texture sampler variable to texture unit 0
+    // (set in glActiveTexture(GL_TEXTURE0))
+    
+    glUniform1i( uTex, 0);
+    
     
     uAmbient   = glGetUniformLocation( program, "AmbientProduct"  );
     uDiffuse   = glGetUniformLocation( program, "DiffuseProduct"  );
@@ -378,6 +400,16 @@ void init() {
     glUniform1f(uShininess, 100.0f);
     
     glEnable(GL_DEPTH_TEST);
+}
+
+void set_colour(float r, float g, float b)
+{
+    float ambient  = 0.2f;
+    float diffuse  = 0.6f;
+    float specular = 0.2f;
+    glUniform4f(uAmbient,  ambient*r,  ambient*g,  ambient*b,  1.0f);
+    glUniform4f(uDiffuse,  diffuse*r,  diffuse*g,  diffuse*b,  1.0f);
+    glUniform4f(uSpecular, specular*r, specular*g, specular*b, 1.0f);
 }
 
 
@@ -403,7 +435,7 @@ void displayHandler() {
     mat4 p;
     
     for (int i = 0; i < blocks.size(); i++) {
-        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), blocks[i].x, blocks[i].y, blocks[i].z);
+        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), blocks[i].x, blocks[i].y, blocks[i].z, 1);
     }
 
 
@@ -489,9 +521,9 @@ void displayHandler() {
     else {
         //should go inside else
 
-        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100);
-        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200);
-        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), -10, 10, -200);
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 0, 10, -100, 0);
+        drawRectangle(shipCenter, vec4(0.0,1.0,0.0,1.0), 20, 10, -200, 0);
+        drawRectangle(blockModel, vec4(0.0,1.0,0.0,1.0), -10, 10, -200, 0);
         
         
         
