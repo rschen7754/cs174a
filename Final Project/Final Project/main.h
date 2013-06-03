@@ -70,7 +70,7 @@ const int RIGHT = 3;
 const int FORWARD = 4;
 
 float SCORE = 0;
-int health = 100;
+int health = 3;
 
 int Width = 800;
 int Height = 800 ;

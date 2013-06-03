@@ -335,11 +335,17 @@ bool Player:: didCollide(){
     if (menuState==MENU_ON || menuState==MENU_OVER)
         return false;
     
+    std::vector<cubePos>::iterator it = blocks.begin();
     for (int i = 0; i < blocks.size(); i++) {
+
+        
         if ((m_posx+10 > blocks[i].x && m_posx-5 < blocks[i].x+5) &&
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
             (m_posz -30< blocks[i].z && m_posz > blocks[i].z+5)) {
 			health--;
+        
+            blocks.erase(it);
+            
             if (health <= 0)
 			{
 				setDead();
@@ -347,6 +353,7 @@ bool Player:: didCollide(){
 			}
             return true;
         }
+                it++;
         
         
     }
