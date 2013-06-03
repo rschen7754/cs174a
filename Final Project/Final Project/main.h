@@ -166,8 +166,7 @@ point4 menuBox[6] = {
     point4( 10.0, -5.0,  0.0, 1.0 ),
 };
 
-GLuint texture_menu;
-GLuint texture_gameover;
+GLuint texture_cube;
 
 
 #endif

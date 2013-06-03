@@ -355,8 +355,8 @@ void init() {
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
    //   glClearColor( 1.0, 1.0, 1.0, 1.0 );
     
-    TgaImage menuImage;
-    if (!menuImage.loadTGA("menu.tga"))
+    TgaImage cubeImage;
+    if (!cubeImage.loadTGA("cube_Texture.tga"))
     {
         printf("Error loading image file menu\n");
         exit(1);
