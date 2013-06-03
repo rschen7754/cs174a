@@ -69,6 +69,9 @@ const int LEFT = 2;
 const int RIGHT = 3;
 const int FORWARD = 4;
 
+GLfloat mapWidthLeft;
+GLfloat mapWidthRight;
+
 float SCORE = 0;
 int health = 3;
 

@@ -116,8 +116,8 @@ void drawRectangle(point4 points[], vec3 normals[], vec4 fColor, GLfloat x, GLfl
     // set up vertex arrays
     glEnableVertexAttribArray( vPosition );
     glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
- //   glEnableVertexAttribArray( vNormal );
-  //  glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(point4)*NumVertices) );
+    //glEnableVertexAttribArray( vNormal );
+    //glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(point4)*NumVertices) );
     
     // Collin's Light Code ========================================================
     
@@ -258,11 +258,21 @@ void Player::move(int dir)
         m_posy -= movement;
         pos_y += movement;
     }else if (dir == LEFT){
-        m_posx -= movement;
-        pos_x += movement;
+        if (m_posx > mapWidthLeft) {
+            m_posx -= movement;
+            pos_x += movement;
+        }else{
+            health = 0;
+        }
+
     }else if (dir == RIGHT){
-        m_posx += movement;
-        pos_x -= movement;
+        if (m_posx < mapWidthRight) {
+            m_posx += movement;
+            pos_x -= movement;
+        }else{
+            health = 0;
+        }
+       
     }else if (dir == FORWARD){
         m_posz -= movement/speed;
         pos_z += movement/speed;
@@ -362,8 +372,6 @@ bool Player:: didCollide(){
             
             if (health <= 0)
 			{
-                std::cerr << "m_posx: " << m_posx -5<< "\n";
-                std::cerr << "blockx: " << blocks[i].x +5<< "\n";
 				setDead();
 				menuState = MENU_OVER;
 
@@ -425,6 +433,10 @@ void init() {
     readFile();
     end = storeBlocks(xPos, yPos, zPos);
 	int numBlocks = xPos.size();
+    
+    // Assume first and last are the widths of the field:
+    mapWidthLeft = xPos[0];
+    mapWidthRight = xPos[xPos.size()-1];
     
 	for (int i = 0; i < numBlocks; i++)
 	{
