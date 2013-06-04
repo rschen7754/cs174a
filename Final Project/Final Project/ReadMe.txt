@@ -8,7 +8,7 @@ Our project is called Space Runner.  The point of the game is to pilot a
 spaceship via keyboard arrow keys to avoid blocks and get the highest score 
 possible by reaching the end of the game.  The user has a limited amount
 of lives, and a life is deducted each time the user hits a block. Users can 
-utilize the provided map, or create custom maps by modyfing the map file.  The 
+utilize the provided map, or create custom maps by modifying the map file.  The 
 coordinates are specified by placing an 'x' with a random generation of the block's 
 vertical position, or a column of blocks with a 'w'. A 'b' indicates
 the lack of a block at the specified coordinate.  
