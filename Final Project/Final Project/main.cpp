@@ -237,6 +237,7 @@ void Player::move(int dir)
     }else if (dir == FORWARD){
         m_posz -= movement/speed;
         pos_z += movement/speed;
+
     }
 }
 
@@ -385,7 +386,7 @@ void drawRectangle(point4 points[], vec3 normals[], vec4 fColor, GLfloat x, GLfl
     
     // Collin's Light Code ========================================================
     
-    point4 light_position( User.getX(), User.getY()+10, User.getZ() -100, 1.0 );
+    point4 light_position( User.getX(), User.getY()+10, User.getZ()-100, 1.0 );
     glUniform4fv( glGetUniformLocation(program, "LightPosition"), 1, light_position );
     
     
@@ -704,6 +705,7 @@ void keyHandler(unsigned char key, int x, int y) {
     
     switch (key) {
         
+            
             
         case 'q':
         case 'Q':
