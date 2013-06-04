@@ -31,9 +31,9 @@ topic.
 2) Custom user generated maps are implemented
 3) All movement (horizontal, as well as vertical) is implemented
 	-We made a decision to limit it to keyboard movement, due to the 
-	spacing of the blocks required to make the game playeable.  
+	spacing of the blocks required to make the game playable.  
 	Mouse movement would have made the game too easy, allowing users to 
-	easily circumvent the blocks of a user-generated map. Keyboard movment
+	easily circumvent the blocks of a user-generated map. Keyboard movement
 	allowed us to specify how much the ship moved with each keystroke,
 	ensuring that the ship would shift in alignment with the block placement.
 	-vertical movement is limited to one unit up and one unit down from 
@@ -66,3 +66,8 @@ Press left arrow key: move ship left
 Press right arrow key: move ship right
 Press up arrow key: move ship up
 Press down arrow key: move ship down
+
+-----Suggested improvements-----
+Settings like the number of lives could also be included in map.txt, to avoid recompiling
+when changing maps since they depend on each other. Other improvements to the gameplay
+could be considered as well.
