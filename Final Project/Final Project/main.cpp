@@ -24,29 +24,29 @@ void quad( int a, int b, int c, int d, point4 vertices[], point4 points[], const
 {
     points[Index] = vertices[a];
     cubeNormals[Index] = normal;
-  //  cubeUV[Index] = point2(0.0f, 1.0f);
+    //  cubeUV[Index] = point2(0.0f, 1.0f);
     Index++;
     points[Index] = vertices[b];
     cubeNormals[Index] = normal;
-   // cubeUV[Index] = point2(0.0f, 0.0f);
+    // cubeUV[Index] = point2(0.0f, 0.0f);
     Index++;
     points[Index] = vertices[c];
     cubeNormals[Index] = normal;
-   // cubeUV[Index] = point2(1.0f, 0.0f);
+    // cubeUV[Index] = point2(1.0f, 0.0f);
     Index++;
     points[Index] = vertices[a];
     cubeNormals[Index] = normal;
-  //  cubeUV[Index] = point2(0.0f, 1.0f);
+    //  cubeUV[Index] = point2(0.0f, 1.0f);
     Index++;
     points[Index] = vertices[c];
     cubeNormals[Index] = normal;
-   // cubeUV[Index] = point2(1.0f, 0.0f);
+    // cubeUV[Index] = point2(1.0f, 0.0f);
     Index++;
     points[Index] = vertices[d];
     cubeNormals[Index] = normal;
-   // cubeUV[Index] = point2(1.0f, 1.0f);
+    // cubeUV[Index] = point2(1.0f, 1.0f);
     Index++;
-
+    
     
 }
 /*
@@ -185,32 +185,24 @@ Player::Player(int x, int y)
 
 void Player::reinitializePlayer()
 {
- //   m_posx = 0;
- //   m_posy = 0;
- //   m_posz = 0;
+    //    m_posx = 0;
+    //    m_posy = 0;
+    //    m_posz = 0;
     health=10;
     m_isAlive = true;
     m_heightLevel = HEIGHT_CENTER;
     m_animationStatus = ANIMATE_NONE;
     m_oldx = m_posx;
-
+    
+    
 }
-    GLfloat acceleration = 1;
+
 void Player::move(int dir)
 {
     GLfloat speed = 1.7;
-
-    GLfloat movement = DTIME*250*speed*acceleration;
-//    if (TIME > 15) {
-//        acceleration = 1.25;
-//    }else if (TIME > 25)
-//    {
-//        acceleration = 1.5;
-//    }else if (TIME > 60)
-//    {
-//        acceleration = 1.75;
-//        std::cerr << "fast";
-//    }
+    
+    GLfloat movement = DTIME*250*speed;
+    
     
     if (dir == UP) {
         m_posy += movement;
@@ -224,20 +216,22 @@ void Player::move(int dir)
             pos_x += movement;
         }else{
             health = 0;
+            setDead();
         }
-
+        
     }else if (dir == RIGHT){
         if (m_posx < mapWidthRight) {
             m_posx += movement;
             pos_x -= movement;
         }else{
             health = 0;
+            setDead();
         }
-       
+        
     }else if (dir == FORWARD){
         m_posz -= movement/speed;
         pos_z += movement/speed;
-
+        
     }
 }
 
@@ -296,11 +290,11 @@ void Player::RoundPositions(int animation)
 {
     
     if (animation == ANIMATE_LEFT) {
-            m_posx = getOldX() - 25;
+        m_posx = getOldX() - 25;
     }else if (animation == ANIMATE_RIGHT)
     {
         m_posx = getOldX() + 25;
-    }else 
+    }else
     {
         if (getHeightLevel() == HEIGHT_TOP) {
             m_posy = 15;
@@ -311,7 +305,7 @@ void Player::RoundPositions(int animation)
             m_posy = -15;
         }
     }
-
+    
     
     pos_x = -m_posx - 2.0;
     pos_y = -m_posy -15.0;
@@ -325,7 +319,7 @@ bool Player:: didCollide(){
     
     std::vector<cubePos>::iterator it = blocks.begin();
     for (int i = 0; i < blocks.size(); i++) {
-
+        
         
         if ((m_posx+5 >= blocks[i].x && m_posx-5 <= blocks[i].x+5) &&
             (m_posy + 5 > blocks[i].y && m_posy < blocks[i].y+5)&&
@@ -336,18 +330,18 @@ bool Player:: didCollide(){
 			{
 				setDead();
 				menuState = MENU_OVER;
-
+                
 			}else{
                 it+=i;
                 blocks.erase(it);
             }
             return true;
         }
-           
+        
         
         
     }
-   // std::cerr<<end << " " << m_posz;
+    
     if ((m_posz*-1) >= end) {
         
         setDead();
@@ -362,7 +356,7 @@ bool Player:: didCollide(){
 void Player::draw(){
     drawRectangle(shipleft, shipleftNormals, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
     drawRectangle(shipCenter,shipCenterNormals, COLOR_GREY, m_posx, m_posy, m_posz, 0);
-    drawRectangle(shipRight, shipRightNormals, COLOR_BLUE, m_posx, m_posy, m_posz, 0);    
+    drawRectangle(shipRight, shipRightNormals, COLOR_BLUE, m_posx, m_posy, m_posz, 0);
 }
 
 // Initialize Player
@@ -446,8 +440,9 @@ void init() {
 	int numBlocks = xPos.size();
     
     // Assume first and last are the widths of the field:
-    mapWidthLeft = xPos[0];
-    mapWidthRight = xPos[xPos.size()-1];
+    mapWidthLeft = xPos[0]+25;
+    mapWidthRight = xPos[xPos.size()-1]+25;
+
     
 	for (int i = 0; i < numBlocks; i++)
 	{
@@ -467,7 +462,7 @@ void init() {
     
     // Place test blocks into blocks vector for collision detection
     
-
+    
     
     TgaImage cubeImage;
     if (!cubeImage.loadTGA("cube_Texture2.tga"))
@@ -508,7 +503,7 @@ void init() {
     glUniform4f(uLightPos,  0.0f, 10.0f, 20.0f, 0.0f);
     glUniform1f(uShininess, 100.0f);
     
-
+    
     
     
     glEnable(GL_DEPTH_TEST);
@@ -536,7 +531,7 @@ void glutPrint(float x, float y, float z, std::string text, float r, float g, fl
     glUniform4fv(glGetUniformLocation(program, "fcolor"), 1, color4(r,g,b,a));
     //glRasterPos2f(x,y);
     glRasterPos3f(x, y, z);
-
+    
     for (int i = 0; i < text.size(); i++) {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text[i]);
     }
@@ -561,7 +556,7 @@ void displayHandler() {
             }else{
                 User.setHeightLevel(HEIGHT_CENTER);
                 User.setAnimationStatus(ANIMATE_NONE);
-                                User.RoundPositions(ANIMATE_UP);
+                User.RoundPositions(ANIMATE_UP);
             }
         }
         else if(User.getHeightLevel() == HEIGHT_CENTER){
@@ -622,7 +617,7 @@ void displayHandler() {
     // Display the Score
     std::stringstream ss;
     ss <<"Score: " << SCORE;
-
+    
 	//Display health
 	std::stringstream healthDisp;
     healthDisp <<"Lives: " << health;
@@ -654,33 +649,33 @@ void displayHandler() {
         User.didCollide();
     }
     
-        if ((User.getZ()*-1) >= end) {
-                mat4 mv=ModelView*Translate(pos_x+0.1, pos_y+10,pos_z);
-                glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-                glutPrint(-1.8 , 35,-50, "You won!", 1.0, 1.0, 1.0, 1.0);
-            
-                mv=ModelView*Translate(pos_x-5, pos_y,pos_z);
-                glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-
-                glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
-            
-            
-                mv=ModelView*Translate(pos_x+5, pos_y,pos_z);
-                glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-                glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
-            }
-        else if (!User.isAlive()) {
-            mat4 mv=ModelView*Translate(pos_x, pos_y+10,pos_z);
-            glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-            glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
-            
-            mv=ModelView*Translate(pos_x-5, pos_y,pos_z);
-            glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-            glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
-            
-            mv=ModelView*Translate(pos_x+5, pos_y,pos_z);
-            glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
-		 glutPrint(-25, 35, -50,"Lives: 0", 1.0, 1.0, 1.0, 1.0);
+    if ((User.getZ()*-1) >= end) {
+        mat4 mv=ModelView*Translate(pos_x+0.1, pos_y+10,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+        glutPrint(-1.8 , 35,-50, "You won!", 1.0, 1.0, 1.0, 1.0);
+        
+        mv=ModelView*Translate(pos_x-5, pos_y,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+        
+        glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
+        
+        
+        mv=ModelView*Translate(pos_x+5, pos_y,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+        glutPrint(-25, 35, -50,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
+    }
+    else if (!User.isAlive()) {
+        mat4 mv=ModelView*Translate(pos_x, pos_y+10,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+        glutPrint(-1.8 , 35,-50, "Game Over", 1.0, 1.0, 1.0, 1.0);
+        
+        mv=ModelView*Translate(pos_x-5, pos_y,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+        glutPrint(-3 , 25,-50, ss.str(), 1.0, 1.0, 1.0, 1.0);
+        
+        mv=ModelView*Translate(pos_x+5, pos_y,pos_z);
+        glUniformMatrix4fv( ModelView, 1, GL_TRUE, mv );
+        glutPrint(-25, 35, -50,"Lives: 0", 1.0, 1.0, 1.0, 1.0);
         
     }else{
         mat4 mv=ModelView*Translate(pos_x-5, pos_y,pos_z);
@@ -692,8 +687,8 @@ void displayHandler() {
 		glutPrint(-25, 35, -20,healthDisp.str(), 1.0, 1.0, 1.0, 1.0);
     }
     
-
-
+    
+    
     
     glutSwapBuffers();
 }
@@ -704,7 +699,7 @@ void keyHandler(unsigned char key, int x, int y) {
         return;
     
     switch (key) {
-        
+            
             
             
         case 'q':
@@ -718,7 +713,6 @@ void keyHandler(unsigned char key, int x, int y) {
                 TM.Reset();
                 User.reinitializePlayer();
                 TIME = 0;
-                acceleration = 1;
             }
             break;
             

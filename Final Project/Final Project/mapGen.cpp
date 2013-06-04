@@ -122,6 +122,9 @@ int storeBlocks(vector<float> &xPos, vector<float> &yPos, vector<float> &zPos)
 		zPos.push_back((float)(itr2*50+300)); //into the screen
 		yPos.push_back(15);
 		itr1++;
+
+
+        
 		for (col = row->begin(); col != row->end(); col++)
 		{
 			//if (map[i][j] == 1)
