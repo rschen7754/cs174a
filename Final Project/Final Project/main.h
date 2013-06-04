@@ -73,7 +73,7 @@ GLfloat mapWidthLeft;
 GLfloat mapWidthRight;
 
 float SCORE = 0;
-int health = 3;
+int health = 10;
 
 int Width = 800;
 int Height = 800 ;
