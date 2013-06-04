@@ -68,6 +68,7 @@ Press up arrow key: move ship up
 Press down arrow key: move ship down
 
 -----Suggested improvements-----
-Settings like the number of lives could also be included in map.txt, to avoid recompiling
+Settings the number of lives could also be included in map.txt, to avoid recompiling
 when changing maps since they depend on each other. Other improvements to the gameplay
-could be considered as well.
+could be considered as well such as optimizing the collision detection by
+removing all cubes from play once the user passes them. 
