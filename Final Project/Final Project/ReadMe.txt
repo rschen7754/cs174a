@@ -1,6 +1,6 @@
 CS 174 Project README
 
-Roy Chen, Kenny Chow, Collin Yen
+
 
 -----Project Introduction-----
 
